@@ -46,8 +46,10 @@ function MemePlaceholder({ tier }: { tier: ResultTier }) {
 
 export default function Home() {
   const [screen, setScreen] = useState<Screen>("input");
+  const [nameInput, setNameInput] = useState("");
   const [minutesInput, setMinutesInput] = useState(String(campaignConfig.calculator.defaultValue));
   const [minutes, setMinutes] = useState(campaignConfig.calculator.defaultValue);
+  const [nameError, setNameError] = useState("");
   const [error, setError] = useState("");
   const [sharing, setSharing] = useState(false);
   const [shareError, setShareError] = useState("");
@@ -59,6 +61,7 @@ export default function Home() {
   const days = useMemo(() => (minutes * 365) / 1440, [minutes]);
   const hours = useMemo(() => Math.round((minutes * 365) / 60), [minutes]);
   const tier = useMemo(() => getTier(minutes), [minutes]);
+  const displayName = useMemo(() => nameInput.trim().replace(/\s+/g, " "), [nameInput]);
 
   useEffect(() => track("calculator_opened"), []);
 
@@ -80,6 +83,14 @@ export default function Home() {
 
   const calculate = () => {
     markStarted();
+    if (!displayName) {
+      setNameError("وش نناديك؟ اكتب اسمك الأول.");
+      return;
+    }
+    if (displayName.length < 2) {
+      setNameError("اكتب اسمك بشكل أوضح شوي.");
+      return;
+    }
     const validation = validate();
     if (validation) {
       setError(validation);
@@ -87,6 +98,7 @@ export default function Home() {
     }
     const value = Math.round(Number(minutesInput));
     if (value > campaignConfig.calculator.max && !window.confirm("أكثر من 6 ساعات؟ متأكد من الرقم؟")) return;
+    setNameError("");
     setError("");
     setMinutes(value);
     setScreen("calculating");
@@ -103,48 +115,71 @@ export default function Home() {
     const ctx = canvas.getContext("2d");
     if (!ctx) throw new Error("canvas");
 
-    ctx.fillStyle = campaignConfig.colors.ink;
+    ctx.fillStyle = campaignConfig.colors.cream;
     ctx.fillRect(0, 0, 1080, 1920);
+
+    // رأس البطاقة: هوية اللعبة داخل منطقة الأمان للستوري.
+    ctx.fillStyle = campaignConfig.colors.ink;
+    ctx.fillRect(0, 0, 1080, 300);
     ctx.fillStyle = campaignConfig.colors.orange;
     ctx.beginPath();
-    ctx.arc(960, 120, 350, 0, Math.PI * 2);
+    ctx.arc(1000, 20, 310, 0, Math.PI * 2);
     ctx.fill();
-    ctx.fillStyle = tier.accent;
-    ctx.beginPath();
-    ctx.arc(80, 1560, 260, 0, Math.PI * 2);
-    ctx.fill();
-
     ctx.direction = "rtl";
     ctx.textAlign = "right";
     ctx.fillStyle = campaignConfig.colors.cream;
-    ctx.font = '700 54px "Lama Sans", Arial';
-    ctx.fillText("سويتر", 920, 170);
-    ctx.fillStyle = campaignConfig.colors.accent;
-    ctx.font = '900 106px "Lama Sans", Arial';
-    ctx.fillText("تهمنا", 920, 300);
-
-    ctx.fillStyle = campaignConfig.colors.cream;
     ctx.font = '700 48px "Lama Sans", Arial';
-    ctx.fillText(`أقضي ${formatNumber(days)} يومًا من سنتي`, 920, 490);
-    ctx.fillText("داخل السيارة!", 920, 552);
-    ctx.fillStyle = campaignConfig.colors.orange;
-    ctx.font = '900 240px "Lama Sans", Arial';
-    ctx.fillText(formatNumber(days), 920, 815);
+    ctx.fillText("سويتر", 920, 125);
+    ctx.fillStyle = campaignConfig.colors.accent;
+    ctx.font = '900 92px "Lama Sans", Arial';
+    ctx.fillText("تهمنا", 920, 230);
     ctx.fillStyle = campaignConfig.colors.cream;
-    ctx.font = '700 44px "Lama Sans", Arial';
-    ctx.fillText(`${englishDigits.format(minutes)} دقيقة يوميًا`, 920, 890);
+    ctx.font = '600 30px "Lama Sans", Arial';
+    ctx.fillText("حاسبة وقتك في السيارة", 430, 145);
 
-    ctx.fillStyle = tier.accent;
-    ctx.roundRect(100, 1010, 880, 500, 52);
+    // اسم اللاعب والنتيجة الرئيسية.
+    ctx.fillStyle = campaignConfig.colors.accent;
+    ctx.roundRect(100, 360, 880, 120, 34);
     ctx.fill();
+    ctx.fillStyle = "#ffffff";
+    ctx.font = '900 56px "Lama Sans", Arial';
     ctx.textAlign = "center";
-    ctx.font = '180px "Lama Sans", Arial';
-    ctx.fillText(tier.emoji, 540, 1240);
+    ctx.fillText(`يا ${displayName}، هذه نتيجتك`, 540, 438, 780);
+
+    ctx.fillStyle = campaignConfig.colors.ink;
+    ctx.font = '700 42px "Lama Sans", Arial';
+    ctx.fillText("تقضي من سنتك داخل السيارة", 540, 570);
+    ctx.fillStyle = campaignConfig.colors.orange;
+    ctx.font = '900 250px "Lama Sans", Arial';
+    ctx.fillText(formatNumber(days), 540, 820);
     ctx.fillStyle = campaignConfig.colors.ink;
     ctx.font = '900 58px "Lama Sans", Arial';
-    ctx.fillText(`شخصيتي: ${tier.name}`, 540, 1350);
-    ctx.font = '700 38px "Lama Sans", Arial';
-    ctx.fillText(tier.message, 540, 1420, 760);
+    ctx.fillText("يومًا كاملًا!", 540, 905);
+    ctx.fillStyle = "#6f675d";
+    ctx.font = '700 34px "Lama Sans", Arial';
+    ctx.fillText(`${englishDigits.format(minutes)} دقيقة يوميًا • ${englishDigits.format(hours)} ساعة سنويًا`, 540, 970);
+
+    // بطاقة الشخصية والميم.
+    ctx.fillStyle = campaignConfig.colors.ink;
+    ctx.roundRect(100, 1040, 880, 420, 48);
+    ctx.fill();
+    ctx.fillStyle = tier.accent;
+    ctx.beginPath();
+    ctx.arc(250, 1250, 145, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.font = '145px Arial';
+    ctx.fillText(tier.emoji, 250, 1300);
+    ctx.textAlign = "right";
+    ctx.fillStyle = campaignConfig.colors.accent;
+    ctx.font = '700 28px "Lama Sans", Arial';
+    ctx.fillText(`شخصية ${displayName}`, 900, 1145, 520);
+    ctx.fillStyle = campaignConfig.colors.cream;
+    ctx.font = '900 56px "Lama Sans", Arial';
+    ctx.fillText(tier.name, 900, 1220, 520);
+    ctx.font = '700 34px "Lama Sans", Arial';
+    ctx.fillText(tier.message, 900, 1310, 520);
+    ctx.fillStyle = campaignConfig.colors.orange;
+    ctx.fillRect(450, 1360, 450, 9);
 
     const qrUrl = await QRCode.toDataURL(campaignConfig.shareUrl, { width: 210, margin: 1, color: { dark: "#171512", light: "#fff8ea" } });
     const qr = new Image();
@@ -153,20 +188,26 @@ export default function Home() {
       qr.onerror = () => reject(new Error("qr"));
       qr.src = qrUrl;
     });
-    ctx.fillStyle = campaignConfig.colors.cream;
-    ctx.roundRect(100, 1610, 880, 220, 36);
+    ctx.fillStyle = campaignConfig.colors.orange;
+    ctx.roundRect(100, 1520, 880, 280, 42);
     ctx.fill();
-    ctx.drawImage(qr, 730, 1615, 210, 210);
+    ctx.fillStyle = campaignConfig.colors.cream;
+    ctx.roundRect(730, 1555, 210, 210, 18);
+    ctx.fill();
+    ctx.drawImage(qr, 745, 1570, 180, 180);
     ctx.textAlign = "right";
+    ctx.fillStyle = "#ffffff";
+    ctx.font = '900 46px "Lama Sans", Arial';
+    ctx.fillText("احسب وقتك أنت بعد", 675, 1625);
+    ctx.font = '700 31px "Lama Sans", Arial';
+    ctx.fillText("صوّر الكود وجرّب اللعبة", 675, 1685);
     ctx.fillStyle = campaignConfig.colors.ink;
-    ctx.font = '900 43px "Lama Sans", Arial';
-    ctx.fillText("احسب وقتك أنت بعد", 670, 1700);
-    ctx.font = '700 34px "Lama Sans", Arial';
-    ctx.fillText(campaignConfig.brand.hashtag, 670, 1760);
+    ctx.font = '900 30px "Lama Sans", Arial';
+    ctx.fillText(campaignConfig.brand.hashtag, 675, 1750);
 
     const blob = await new Promise<Blob | null>((resolve) => canvas.toBlob(resolve, "image/png", 0.94));
     if (!blob) throw new Error("blob");
-    return new File([blob], "نتيجتي-تهمنا.png", { type: "image/png" });
+    return new File([blob], `نتيجة-${displayName}-تهمنا.png`, { type: "image/png" });
   };
 
   const downloadFile = (file: File) => {
@@ -200,7 +241,7 @@ export default function Home() {
       const file = await generateStory();
       const shareData = {
         files: [file],
-        text: `طلعت أقضي ${formatNumber(days)} يومًا من سنتي داخل السيارة 😅 احسب نتيجتك أنت بعد. ${campaignConfig.brand.hashtag}`,
+        text: `أنا ${displayName} وطلعت أقضي ${formatNumber(days)} يومًا من سنتي داخل السيارة 😅 احسب نتيجتك أنت بعد. ${campaignConfig.brand.hashtag}`,
       };
       if (navigator.share && navigator.canShare?.({ files: [file] })) {
         track("share_invoked");
@@ -231,7 +272,7 @@ export default function Home() {
   };
 
   const copyShareText = async () => {
-    await navigator.clipboard.writeText(`طلعت أقضي ${formatNumber(days)} يومًا من سنتي داخل السيارة 😅 احسب نتيجتك أنت بعد. ${campaignConfig.brand.hashtag}`);
+    await navigator.clipboard.writeText(`أنا ${displayName} وطلعت أقضي ${formatNumber(days)} يومًا من سنتي داخل السيارة 😅 احسب نتيجتك أنت بعد. ${campaignConfig.brand.hashtag}`);
   };
 
   const copyCode = async () => {
@@ -264,6 +305,28 @@ export default function Home() {
           <p className="intro">حط متوسط وقتك اليومي في السيارة… ويمكن النتيجة تصدمك شوي.</p>
 
           <div className="calculator-card">
+            <label htmlFor="player-name">أول شيء… وش اسمك؟</label>
+            <div className="name-field">
+              <input
+                id="player-name"
+                type="text"
+                inputMode="text"
+                autoComplete="given-name"
+                maxLength={20}
+                placeholder="مثلاً: أحمد"
+                value={nameInput}
+                aria-invalid={Boolean(nameError)}
+                aria-describedby={nameError ? "name-error" : undefined}
+                onFocus={markStarted}
+                onChange={(event) => {
+                  setNameInput(event.target.value.replace(/[^\p{L}\p{M}\s'-]/gu, ""));
+                  setNameError("");
+                }}
+              />
+            </div>
+            {nameError && <p className="field-error name-error" id="name-error" role="alert">{nameError}</p>}
+            {displayName && <p className="name-preview" aria-live="polite">يا {displayName}، جاهز تعرف الصدمة؟</p>}
+            <div className="form-divider"><span>والحين نبدأ</span></div>
             <label htmlFor="minutes">كم دقيقة تقضيها يوميًا في السيارة؟</label>
             <div className="number-field" data-suffix="دقيقة">
               <input
@@ -300,7 +363,7 @@ export default function Home() {
             {error && <p className="field-error" id="minutes-error" role="alert">{error}</p>}
             <button className="primary-button" onClick={calculate}>احسب وقتي <span aria-hidden="true">←</span></button>
           </div>
-          <p className="privacy-note"><span>●</span> بدون تسجيل وبدون بيانات شخصية</p>
+          <p className="privacy-note"><span>●</span> اسمك يبقى داخل التجربة وبطاقة المشاركة فقط</p>
         </section>
       )}
 
@@ -308,8 +371,8 @@ export default function Home() {
         <section className="panel loading-panel" aria-live="polite" aria-busy="true">
           <div className="loading-orbit"><span className="loading-number">{englishDigits.format(minutes)}</span><small>دقيقة</small></div>
           <div className="road"><span className="car" aria-hidden="true">🚙</span><i /><i /><i /><i /></div>
-          <h1>جالسين نحسب مشاويرك…</h1>
-          <p>نجمع الدقائق، نعدّ الساعات، ونجهّز الصدمة.</p>
+          <h1>يا {displayName}، جالسين نحسب مشاويرك…</h1>
+          <p>نجمع دقائقك، نعدّ ساعاتك، ونجهّز لك الصدمة.</p>
           <div className="calendar-flip" aria-hidden="true"><span>365</span><small>يوم</small></div>
         </section>
       )}
@@ -317,14 +380,14 @@ export default function Home() {
       {screen === "result" && (
         <section className="panel result-panel" aria-labelledby="result-title">
           <div className="eyebrow"><i /> نتيجتك</div>
-          <h1 id="result-title">يا ساتر… شوف نتيجتك!</h1>
+          <h1 id="result-title">يا {displayName}… وش ذا كله!</h1>
           <div className="result-number"><strong>{formatNumber(days)}</strong><span>يومًا</span></div>
-          <p className="result-context">من سنتك تقضيها داخل السيارة</p>
+          <p className="result-context">من سنتك يا {displayName} تقضيها داخل السيارة</p>
 
           <div className="tier-card" style={{ "--tier-accent": tier.accent } as React.CSSProperties}>
-            <div className="tier-heading"><span>شخصيتك</span><h2>{tier.name}</h2></div>
+            <div className="tier-heading"><span>شخصية {displayName}</span><h2>{tier.name}</h2></div>
             <MemePlaceholder tier={tier} />
-            <blockquote>«{tier.message}»</blockquote>
+            <blockquote>«{displayName}، {tier.message}»</blockquote>
           </div>
 
           <div className="stat-strip">
@@ -336,7 +399,7 @@ export default function Home() {
           <div className="share-card">
             <span className="share-sticker">جاهز للستوري ✦</span>
             <h2>شاركنا نتيجتك وخذ<br />كود خصم خاص.</h2>
-            <p>شاركها في الستوري وخل أصحابك يحسبون وقتهم.</p>
+            <p>جهزناها باسمك وبهويّة اللعبة، شاركها في الستوري وخل أصحابك يحسبون وقتهم.</p>
             <button className="primary-button" onClick={share} disabled={sharing}>
               {sharing ? "جالسين نجهّز بطاقتك…" : "شارك نتيجتي"} <span aria-hidden="true">↗</span>
             </button>
@@ -354,7 +417,7 @@ export default function Home() {
           {discount && (
             <div className="discount-card">
               <div className="confetti" aria-hidden="true">✦　●　✦　●</div>
-              <p>كفو! هذا كودك الخاص من سويتر.</p>
+              <p>كفو يا {displayName}! هذا كودك الخاص من سويتر.</p>
               <button className="code" onClick={copyCode} aria-label="نسخ كود الخصم"><span>{discount.code}</span><small>{copied ? "تم النسخ ✓" : "نسخ الكود"}</small></button>
               <a className="primary-button" href={campaignConfig.bookingUrl} target="_blank" rel="noreferrer" onClick={() => track("booking_clicked")}>استخدم الخصم واحجز الآن <span aria-hidden="true">←</span></a>
               <ul><li>{discount.value}</li><li>ينتهي في {discount.expiresAt}</li><li>{discount.terms}</li><li>يستخدم مرة واحدة فقط</li></ul>
