@@ -119,7 +119,7 @@ export default function Home() {
     ctx.fillStyle = campaignConfig.colors.cream;
     ctx.font = '700 54px "Lama Sans", Arial';
     ctx.fillText("سويتر", 920, 170);
-    ctx.fillStyle = campaignConfig.colors.lime;
+    ctx.fillStyle = campaignConfig.colors.accent;
     ctx.font = '900 106px "Lama Sans", Arial';
     ctx.fillText("تهمنا", 920, 300);
 

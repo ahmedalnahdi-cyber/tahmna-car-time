@@ -18,7 +18,7 @@ export const campaignConfig = {
   },
   colors: {
     orange: "#ff5a1f",
-    lime: "#d9ff45",
+    accent: "#1389ff",
     ink: "#171512",
     cream: "#fff8ea",
   },
@@ -56,7 +56,7 @@ export const campaignConfig = {
       message: "مشوارين وترجع… وضعك للحين بالسليم.",
       image: "/memes/meme-tier-2.webp",
       emoji: "😌",
-      accent: "#d9ff45",
+      accent: "#1389ff",
       alt: "صورة تعبيرية لشخصية راعي المشاوير الخفيفة",
     },
     {
@@ -109,4 +109,3 @@ export const campaignConfig = {
 export const getTier = (minutes: number) =>
   campaignConfig.tiers.find((tier) => minutes >= tier.min && minutes <= tier.max) ??
   campaignConfig.tiers[campaignConfig.tiers.length - 1];
-
