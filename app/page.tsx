@@ -7,8 +7,8 @@ import { campaignConfig, getTier, type ResultTier } from "../lib/campaign-config
 type Screen = "input" | "calculating" | "result";
 type Discount = { code: string; value: string; expiresAt: string; terms: string };
 
-const arabicDigits = new Intl.NumberFormat("ar-SA", { maximumFractionDigits: 1 });
-const formatNumber = (value: number) => arabicDigits.format(Math.abs(value - Math.round(value)) < 0.05 ? Math.round(value) : value);
+const englishDigits = new Intl.NumberFormat("en-US", { maximumFractionDigits: 1 });
+const formatNumber = (value: number) => englishDigits.format(Math.abs(value - Math.round(value)) < 0.05 ? Math.round(value) : value);
 const track = (name: string, detail: Record<string, unknown> = {}) => {
   window.dispatchEvent(new CustomEvent("tahmna-analytics", { detail: { name, ...detail } }));
   const dataLayer = (window as typeof window & { dataLayer?: Record<string, unknown>[] }).dataLayer;
@@ -96,6 +96,7 @@ export default function Home() {
   };
 
   const generateStory = async () => {
+    await document.fonts.load('900 54px "Lama Sans"');
     const canvas = document.createElement("canvas");
     canvas.width = 1080;
     canvas.height = 1920;
@@ -116,33 +117,33 @@ export default function Home() {
     ctx.direction = "rtl";
     ctx.textAlign = "right";
     ctx.fillStyle = campaignConfig.colors.cream;
-    ctx.font = "700 54px Arial";
+    ctx.font = '700 54px "Lama Sans", Arial';
     ctx.fillText("سويتر", 920, 170);
     ctx.fillStyle = campaignConfig.colors.lime;
-    ctx.font = "900 106px Arial";
+    ctx.font = '900 106px "Lama Sans", Arial';
     ctx.fillText("تهمنا", 920, 300);
 
     ctx.fillStyle = campaignConfig.colors.cream;
-    ctx.font = "700 48px Arial";
+    ctx.font = '700 48px "Lama Sans", Arial';
     ctx.fillText(`أقضي ${formatNumber(days)} يومًا من سنتي`, 920, 490);
     ctx.fillText("داخل السيارة!", 920, 552);
     ctx.fillStyle = campaignConfig.colors.orange;
-    ctx.font = "900 240px Arial";
+    ctx.font = '900 240px "Lama Sans", Arial';
     ctx.fillText(formatNumber(days), 920, 815);
     ctx.fillStyle = campaignConfig.colors.cream;
-    ctx.font = "700 44px Arial";
-    ctx.fillText(`${arabicDigits.format(minutes)} دقيقة يوميًا`, 920, 890);
+    ctx.font = '700 44px "Lama Sans", Arial';
+    ctx.fillText(`${englishDigits.format(minutes)} دقيقة يوميًا`, 920, 890);
 
     ctx.fillStyle = tier.accent;
     ctx.roundRect(100, 1010, 880, 500, 52);
     ctx.fill();
     ctx.textAlign = "center";
-    ctx.font = "180px Arial";
+    ctx.font = '180px "Lama Sans", Arial';
     ctx.fillText(tier.emoji, 540, 1240);
     ctx.fillStyle = campaignConfig.colors.ink;
-    ctx.font = "900 58px Arial";
+    ctx.font = '900 58px "Lama Sans", Arial';
     ctx.fillText(`شخصيتي: ${tier.name}`, 540, 1350);
-    ctx.font = "700 38px Arial";
+    ctx.font = '700 38px "Lama Sans", Arial';
     ctx.fillText(tier.message, 540, 1420, 760);
 
     const qrUrl = await QRCode.toDataURL(campaignConfig.shareUrl, { width: 210, margin: 1, color: { dark: "#171512", light: "#fff8ea" } });
@@ -158,9 +159,9 @@ export default function Home() {
     ctx.drawImage(qr, 730, 1615, 210, 210);
     ctx.textAlign = "right";
     ctx.fillStyle = campaignConfig.colors.ink;
-    ctx.font = "900 43px Arial";
+    ctx.font = '900 43px "Lama Sans", Arial';
     ctx.fillText("احسب وقتك أنت بعد", 670, 1700);
-    ctx.font = "700 34px Arial";
+    ctx.font = '700 34px "Lama Sans", Arial';
     ctx.fillText(campaignConfig.brand.hashtag, 670, 1760);
 
     const blob = await new Promise<Blob | null>((resolve) => canvas.toBlob(resolve, "image/png", 0.94));
@@ -295,7 +296,7 @@ export default function Home() {
               }}
               style={{ "--range-progress": `${(Math.min(360, Math.max(1, Number(minutesInput) || 1)) / 360) * 100}%` } as React.CSSProperties}
             />
-            <div className="range-labels" id="minutes-hint"><span>دقيقة واحدة</span><span>٦ ساعات</span></div>
+            <div className="range-labels" id="minutes-hint"><span>دقيقة واحدة</span><span>6 ساعات</span></div>
             {error && <p className="field-error" id="minutes-error" role="alert">{error}</p>}
             <button className="primary-button" onClick={calculate}>احسب وقتي <span aria-hidden="true">←</span></button>
           </div>
@@ -305,11 +306,11 @@ export default function Home() {
 
       {screen === "calculating" && (
         <section className="panel loading-panel" aria-live="polite" aria-busy="true">
-          <div className="loading-orbit"><span className="loading-number">{arabicDigits.format(minutes)}</span><small>دقيقة</small></div>
+          <div className="loading-orbit"><span className="loading-number">{englishDigits.format(minutes)}</span><small>دقيقة</small></div>
           <div className="road"><span className="car" aria-hidden="true">🚙</span><i /><i /><i /><i /></div>
           <h1>جالسين نحسب مشاويرك…</h1>
           <p>نجمع الدقائق، نعدّ الساعات، ونجهّز الصدمة.</p>
-          <div className="calendar-flip" aria-hidden="true"><span>٣٦٥</span><small>يوم</small></div>
+          <div className="calendar-flip" aria-hidden="true"><span>365</span><small>يوم</small></div>
         </section>
       )}
 
@@ -328,7 +329,7 @@ export default function Home() {
 
           <div className="stat-strip">
             <span>يعني تقريبًا</span>
-            <strong>{arabicDigits.format(hours)} ساعة</strong>
+            <strong>{englishDigits.format(hours)} ساعة</strong>
             <span>في السنة</span>
           </div>
 
@@ -368,4 +369,3 @@ export default function Home() {
     </main>
   );
 }
-
