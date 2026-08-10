@@ -32,11 +32,45 @@ function Brand() {
   );
 }
 
-function MemePlaceholder({ tier }: { tier: ResultTier }) {
+function MemeMedia({ tier }: { tier: ResultTier }) {
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [needsSoundTap, setNeedsSoundTap] = useState(false);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+    video.muted = false;
+    video.volume = 1;
+    void video.play().then(() => setNeedsSoundTap(false)).catch(() => {
+      video.muted = true;
+      void video.play();
+      setNeedsSoundTap(true);
+    });
+  }, [tier.id]);
+
+  const enableSound = async () => {
+    const video = videoRef.current;
+    if (!video) return;
+    video.muted = false;
+    video.volume = 1;
+    await video.play();
+    setNeedsSoundTap(false);
+  };
+
   return (
-    <div className="meme-placeholder" style={{ "--tier-accent": tier.accent } as React.CSSProperties} role="img" aria-label={tier.alt}>
-      <span className="meme-label">{tier.id}</span>
-      <span className="meme-emoji" aria-hidden="true">{tier.emoji}</span>
+    <div className="meme-media" style={{ "--tier-accent": tier.accent } as React.CSSProperties}>
+      <video
+        ref={videoRef}
+        className="meme-video"
+        src="/memes/result-demo.mp4"
+        autoPlay
+        loop
+        playsInline
+        preload="auto"
+        aria-label={`ميم شخصية ${tier.name}`}
+      />
+      <span className="meme-label">ميم تجريبي • جميع النتائج</span>
+      {needsSoundTap && <button className="sound-button" type="button" onClick={enableSound}>شغّل الميم بالصوت 🔊</button>}
       <span className="meme-caption">{tier.name}</span>
     </div>
   );
@@ -113,6 +147,22 @@ export default function Home() {
       brandLogo.onerror = () => reject(new Error("logo"));
       brandLogo.src = "/tahmna-logo.svg";
     });
+    const memeFrame = document.createElement("video");
+    memeFrame.src = "/memes/result-demo.mp4";
+    memeFrame.muted = true;
+    memeFrame.playsInline = true;
+    memeFrame.preload = "auto";
+    await new Promise<void>((resolve, reject) => {
+      memeFrame.onloadeddata = () => resolve();
+      memeFrame.onerror = () => reject(new Error("meme"));
+      memeFrame.load();
+    });
+    if (Number.isFinite(memeFrame.duration) && memeFrame.duration > 0.5) {
+      await new Promise<void>((resolve) => {
+        memeFrame.onseeked = () => resolve();
+        memeFrame.currentTime = 0.5;
+      });
+    }
     const canvas = document.createElement("canvas");
     canvas.width = 1080;
     canvas.height = 1920;
@@ -165,12 +215,29 @@ export default function Home() {
     ctx.fillStyle = campaignConfig.colors.ink;
     ctx.roundRect(100, 1040, 880, 420, 48);
     ctx.fill();
-    ctx.fillStyle = tier.accent;
+    const frameX = 120;
+    const frameY = 1090;
+    const frameWidth = 300;
+    const frameHeight = 320;
+    const sourceRatio = memeFrame.videoWidth / memeFrame.videoHeight;
+    const targetRatio = frameWidth / frameHeight;
+    let sourceX = 0;
+    let sourceY = 0;
+    let sourceWidth = memeFrame.videoWidth;
+    let sourceHeight = memeFrame.videoHeight;
+    if (sourceRatio > targetRatio) {
+      sourceWidth = memeFrame.videoHeight * targetRatio;
+      sourceX = (memeFrame.videoWidth - sourceWidth) / 2;
+    } else {
+      sourceHeight = memeFrame.videoWidth / targetRatio;
+      sourceY = (memeFrame.videoHeight - sourceHeight) / 2;
+    }
+    ctx.save();
     ctx.beginPath();
-    ctx.arc(250, 1250, 145, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.font = '145px Arial';
-    ctx.fillText(tier.emoji, 250, 1300);
+    ctx.roundRect(frameX, frameY, frameWidth, frameHeight, 30);
+    ctx.clip();
+    ctx.drawImage(memeFrame, sourceX, sourceY, sourceWidth, sourceHeight, frameX, frameY, frameWidth, frameHeight);
+    ctx.restore();
     ctx.textAlign = "right";
     ctx.fillStyle = campaignConfig.colors.accent;
     ctx.font = '700 28px "Lama Sans", Arial';
@@ -388,7 +455,7 @@ export default function Home() {
 
           <div className="tier-card" style={{ "--tier-accent": tier.accent } as React.CSSProperties}>
             <div className="tier-heading"><span>شخصية {displayName}</span><h2>{tier.name}</h2></div>
-            <MemePlaceholder tier={tier} />
+            <MemeMedia tier={tier} />
             <blockquote>«{displayName}، {tier.message}»</blockquote>
           </div>
 
