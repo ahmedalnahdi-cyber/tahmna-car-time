@@ -111,6 +111,7 @@ export default function Home() {
     if (!Number.isFinite(value)) return "اكتب رقمًا صحيحًا يا بطل.";
     if (value < 0) return "الوقت ما يرجع للخلف يا بطل.";
     if (value === 0) return "أكيد تركب السيارة مو تطالعها من بعيد؟";
+    if (value > campaignConfig.calculator.max) return "الحد الأعلى للحاسبة 240 دقيقة.";
     return "";
   };
 
@@ -130,7 +131,6 @@ export default function Home() {
       return;
     }
     const value = Math.round(Number(minutesInput));
-    if (value > campaignConfig.calculator.max && !window.confirm("أكثر من 6 ساعات؟ متأكد من الرقم؟")) return;
     setNameError("");
     setError("");
     setMinutes(value);
@@ -427,7 +427,7 @@ export default function Home() {
                 setMinutesInput(event.target.value);
                 setError("");
               }}
-              style={{ "--range-progress": `${(Math.min(360, Math.max(1, Number(minutesInput) || 1)) / 360) * 100}%` } as React.CSSProperties}
+              style={{ "--range-progress": `${((Math.min(campaignConfig.calculator.max, Math.max(campaignConfig.calculator.min, Number(minutesInput) || campaignConfig.calculator.min)) - campaignConfig.calculator.min) / (campaignConfig.calculator.max - campaignConfig.calculator.min)) * 100}%` } as React.CSSProperties}
             />
             <div className="range-labels" id="minutes-hint"><span>دقيقة واحدة</span><span>6 ساعات</span></div>
             {error && <p className="field-error" id="minutes-error" role="alert">{error}</p>}

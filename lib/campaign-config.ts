@@ -24,7 +24,7 @@ export const campaignConfig = {
   },
   calculator: {
     min: 1,
-    max: 360,
+    max: 240,
     step: 5,
     defaultValue: 67,
   },
