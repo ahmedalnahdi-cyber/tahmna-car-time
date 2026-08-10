@@ -450,8 +450,8 @@ export default function Home() {
         <section className="panel result-panel" aria-labelledby="result-title">
           <div className="eyebrow"><i /> نتيجتك</div>
           <h1 id="result-title">{displayName}… وش ذا كله!</h1>
-          <div className="result-number"><strong>{formatNumber(days)}</strong><span>يومًا</span></div>
-          <p className="result-context">{displayName}، تقضي من سنتك هذا الوقت داخل السيارة</p>
+            <div className="result-number"><strong>{formatNumber(days)}</strong><span>يوم</span></div>
+            <p className="result-context">تقضيه من سنتك هذا الوقت داخل السيارة</p>
 
           <div className="tier-card" style={{ "--tier-accent": tier.accent } as React.CSSProperties}>
             <div className="tier-heading"><span>شخصية {displayName}</span><h2>{tier.name}</h2></div>
