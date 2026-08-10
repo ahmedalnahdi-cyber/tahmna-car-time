@@ -172,54 +172,57 @@ export default function Home() {
 
     ctx.fillStyle = campaignConfig.colors.cream;
     ctx.fillRect(0, 0, 1080, 1920);
+    ctx.fillStyle = "rgba(23, 21, 18, 0.12)";
+    for (let y = 260; y < 1880; y += 30) {
+      for (let x = 25; x < 1060; x += 30) ctx.fillRect(x, y, 2, 2);
+    }
 
-    // رأس البطاقة: هوية اللعبة داخل منطقة الأمان للستوري.
+    // رأس بسيط وواضح بهوية الحملة.
     ctx.fillStyle = campaignConfig.colors.ink;
-    ctx.fillRect(0, 0, 1080, 300);
+    ctx.fillRect(0, 0, 1080, 230);
     ctx.fillStyle = campaignConfig.colors.orange;
-    ctx.beginPath();
-    ctx.arc(1000, 20, 310, 0, Math.PI * 2);
+    ctx.fillRect(0, 214, 1080, 16);
+    ctx.fillStyle = campaignConfig.colors.cream;
+    ctx.roundRect(790, 28, 210, 174, 28);
     ctx.fill();
     ctx.direction = "rtl";
     ctx.textAlign = "right";
+    ctx.drawImage(brandLogo, 825, 48, 140, 100);
     ctx.fillStyle = campaignConfig.colors.cream;
-    ctx.roundRect(745, 38, 250, 214, 34);
-    ctx.fill();
-    ctx.drawImage(brandLogo, 780, 68, 180, 128);
-    ctx.fillStyle = campaignConfig.colors.cream;
-    ctx.font = '600 30px "Lama Sans", Arial';
-    ctx.fillText("حاسبة وقتك في السيارة", 430, 145);
+    ctx.font = '900 42px "Lama Sans", Arial';
+    ctx.fillText("حاسبة وقتك في السيارة", 700, 105);
+    ctx.font = '600 26px "Lama Sans", Arial';
+    ctx.fillStyle = "#bdb5a8";
+    ctx.fillText("من تهمنا", 700, 152);
 
-    // اسم اللاعب والنتيجة الرئيسية.
+    // النتيجة الرئيسية: الاسم مرة واحدة ثم الرقم.
+    ctx.fillStyle = campaignConfig.colors.ink;
+    ctx.font = '900 68px "Lama Sans", Arial';
+    ctx.textAlign = "center";
+    ctx.fillText(`${displayName}… وش ذا كله!`, 540, 350, 880);
+    ctx.fillStyle = campaignConfig.colors.orange;
+    ctx.font = '900 270px "Lama Sans", Arial';
+    ctx.fillText(formatNumber(days), 540, 625);
+    ctx.fillStyle = campaignConfig.colors.ink;
+    ctx.font = '900 54px "Lama Sans", Arial';
+    ctx.fillText("يوم", 540, 700);
+    ctx.font = '700 38px "Lama Sans", Arial';
+    ctx.fillText("تقضيه من سنتك هذا الوقت داخل السيارة", 540, 775, 850);
     ctx.fillStyle = campaignConfig.colors.accent;
-    ctx.roundRect(100, 360, 880, 120, 34);
+    ctx.roundRect(190, 820, 700, 72, 36);
     ctx.fill();
     ctx.fillStyle = "#ffffff";
-    ctx.font = '900 56px "Lama Sans", Arial';
-    ctx.textAlign = "center";
-    ctx.fillText(`${displayName}… وش ذا كله!`, 540, 438, 780);
+    ctx.font = '700 29px "Lama Sans", Arial';
+    ctx.fillText(`${englishDigits.format(minutes)} دقيقة يوميًا  •  ${englishDigits.format(hours)} ساعة سنويًا`, 540, 866, 640);
 
+    // الميم هو بطل بطاقة الشخصية.
     ctx.fillStyle = campaignConfig.colors.ink;
-    ctx.font = '700 42px "Lama Sans", Arial';
-    ctx.fillText("تقضيه من سنتك هذا الوقت داخل السيارة", 540, 570, 820);
-    ctx.fillStyle = campaignConfig.colors.orange;
-    ctx.font = '900 250px "Lama Sans", Arial';
-    ctx.fillText(formatNumber(days), 540, 820);
-    ctx.fillStyle = campaignConfig.colors.ink;
-    ctx.font = '900 58px "Lama Sans", Arial';
-    ctx.fillText("يوم", 540, 905);
-    ctx.fillStyle = "#6f675d";
-    ctx.font = '700 34px "Lama Sans", Arial';
-    ctx.fillText(`${englishDigits.format(minutes)} دقيقة يوميًا • ${englishDigits.format(hours)} ساعة سنويًا`, 540, 970);
-
-    // بطاقة الشخصية والميم.
-    ctx.fillStyle = campaignConfig.colors.ink;
-    ctx.roundRect(100, 1040, 880, 420, 48);
+    ctx.roundRect(80, 950, 920, 590, 48);
     ctx.fill();
-    const frameX = 120;
-    const frameY = 1090;
-    const frameWidth = 300;
-    const frameHeight = 320;
+    const frameX = 110;
+    const frameY = 980;
+    const frameWidth = 860;
+    const frameHeight = 350;
     const sourceRatio = memeFrame.videoWidth / memeFrame.videoHeight;
     const targetRatio = frameWidth / frameHeight;
     let sourceX = 0;
@@ -239,17 +242,17 @@ export default function Home() {
     ctx.clip();
     ctx.drawImage(memeFrame, sourceX, sourceY, sourceWidth, sourceHeight, frameX, frameY, frameWidth, frameHeight);
     ctx.restore();
-    ctx.textAlign = "right";
+    ctx.textAlign = "center";
     ctx.fillStyle = campaignConfig.colors.accent;
-    ctx.font = '700 28px "Lama Sans", Arial';
-    ctx.fillText("شخصيتك هي", 900, 1145, 520);
+    ctx.font = '800 26px "Lama Sans", Arial';
+    ctx.fillText("شخصيتك هي", 540, 1388);
     ctx.fillStyle = campaignConfig.colors.cream;
-    ctx.font = '900 56px "Lama Sans", Arial';
-    ctx.fillText(tier.name, 900, 1220, 520);
-    ctx.font = '700 34px "Lama Sans", Arial';
-    ctx.fillText(tier.message, 900, 1310, 520);
+    ctx.font = '900 58px "Lama Sans", Arial';
+    ctx.fillText(tier.name, 540, 1452, 820);
+    ctx.font = '700 29px "Lama Sans", Arial';
+    ctx.fillText(tier.message, 540, 1505, 820);
     ctx.fillStyle = campaignConfig.colors.orange;
-    ctx.fillRect(450, 1360, 450, 9);
+    ctx.fillRect(390, 1522, 300, 7);
 
     const qrUrl = await QRCode.toDataURL(campaignConfig.shareUrl, { width: 210, margin: 1, color: { dark: "#171512", light: "#fff8ea" } });
     const qr = new Image();
@@ -259,21 +262,21 @@ export default function Home() {
       qr.src = qrUrl;
     });
     ctx.fillStyle = campaignConfig.colors.orange;
-    ctx.roundRect(100, 1520, 880, 280, 42);
+    ctx.roundRect(80, 1600, 920, 240, 42);
     ctx.fill();
     ctx.fillStyle = campaignConfig.colors.cream;
-    ctx.roundRect(730, 1555, 210, 210, 18);
+    ctx.roundRect(755, 1625, 190, 190, 18);
     ctx.fill();
-    ctx.drawImage(qr, 745, 1570, 180, 180);
+    ctx.drawImage(qr, 770, 1640, 160, 160);
     ctx.textAlign = "right";
     ctx.fillStyle = "#ffffff";
-    ctx.font = '900 46px "Lama Sans", Arial';
-    ctx.fillText("احسب وقتك أنت بعد", 675, 1625);
-    ctx.font = '700 31px "Lama Sans", Arial';
-    ctx.fillText("صوّر الكود وجرّب اللعبة", 675, 1685);
+    ctx.font = '900 44px "Lama Sans", Arial';
+    ctx.fillText("كم تقضي أنت؟", 690, 1680);
+    ctx.font = '700 29px "Lama Sans", Arial';
+    ctx.fillText("صوّر الكود واحسب وقتك", 690, 1732);
     ctx.fillStyle = campaignConfig.colors.ink;
-    ctx.font = '900 30px "Lama Sans", Arial';
-    ctx.fillText(campaignConfig.brand.hashtag, 675, 1750);
+    ctx.font = '900 28px "Lama Sans", Arial';
+    ctx.fillText(campaignConfig.brand.hashtag, 690, 1792);
 
     const blob = await new Promise<Blob | null>((resolve) => canvas.toBlob(resolve, "image/png", 0.94));
     if (!blob) throw new Error("blob");
