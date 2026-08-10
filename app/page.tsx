@@ -70,7 +70,9 @@ function MemeMedia({ tier }: { tier: ResultTier }) {
         preload="auto"
         aria-label={`ميم شخصية ${tier.name}`}
       />
+      <span className="meme-label">ميم شخصية {tier.name}</span>
       {needsSoundTap && <button className="sound-button" type="button" onClick={enableSound}>شغّل الميم بالصوت 🔊</button>}
+      <span className="meme-caption">{tier.name}</span>
     </div>
   );
 }
@@ -453,13 +455,9 @@ export default function Home() {
             <p className="result-context">تقضيه من سنتك هذا الوقت داخل السيارة</p>
 
           <div className="tier-card" style={{ "--tier-accent": tier.accent } as React.CSSProperties}>
-            <div className="tier-heading">
-              <span className="tier-kicker">شخصيتك هي</span>
-              <h2>{tier.name}</h2>
-              <small>من {englishDigits.format(tier.min)} إلى {englishDigits.format(tier.max)} دقيقة يوميًا</small>
-            </div>
+            <div className="tier-heading"><span>شخصية {displayName}</span><h2>{tier.name}</h2></div>
             <MemeMedia tier={tier} />
-            <div className="tier-copy"><span>وصف الشخصية</span><blockquote>«{tier.message}»</blockquote></div>
+            <blockquote>«{displayName}، {tier.message}»</blockquote>
           </div>
 
           <div className="stat-strip">
@@ -469,9 +467,9 @@ export default function Home() {
           </div>
 
           <div className="share-card">
-            <span className="share-sticker">بطاقتك جاهزة ✦</span>
-            <div className="share-card-copy"><span>شارك النتيجة</span><h2>خذ نتيجتك معك.</h2>
-            <p>بطاقة مرتبة باسمك، نتيجتك، شخصيتك والميم الخاص فيها — جاهزة للستوري.</p></div>
+            <span className="share-sticker">جاهز للستوري ✦</span>
+            <h2>شاركنا نتيجتك وخذ<br />كود خصم خاص.</h2>
+            <p>جهزناها باسمك وبهويّة اللعبة، شاركها في الستوري وخل أصحابك يحسبون وقتهم.</p>
             <button className="primary-button" onClick={share} disabled={sharing}>
               {sharing ? "جالسين نجهّز بطاقتك…" : "شارك نتيجتي"} <span aria-hidden="true">↗</span>
             </button>
