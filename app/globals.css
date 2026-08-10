@@ -34,6 +34,7 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 4px solid 
 .noise { position: fixed; inset: 0; z-index: -1; pointer-events: none; opacity: .22; background-image: radial-gradient(#171512 0.6px, transparent 0.6px); background-size: 9px 9px; }
 header { max-width: 1120px; margin: auto; min-height: 76px; padding: 18px 20px; display: flex; align-items: center; justify-content: space-between; border-bottom: 2px solid rgba(23, 21, 18, .14); }
 .brand { display: flex; align-items: center; gap: 8px; font-weight: 900; }
+.brand-logo { width: 76px; height: 54px; display: block; object-fit: contain; }
 .brand-name { font-size: 25px; letter-spacing: -.6px; }
 .brand-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--orange); }
 .brand-campaign { padding: 4px 10px 5px; color: var(--cream); background: var(--ink); border-radius: 8px; transform: rotate(-3deg); }

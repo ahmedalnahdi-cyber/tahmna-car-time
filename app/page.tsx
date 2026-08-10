@@ -27,9 +27,7 @@ const getSessionId = () => {
 function Brand() {
   return (
     <div className="brand" aria-label="سويتر - تهمنا">
-      <span className="brand-name">سويتر</span>
-      <span className="brand-dot" aria-hidden="true" />
-      <span className="brand-campaign">تهمنا</span>
+      <img className="brand-logo" src="/tahmna-logo.svg" alt="شعار تهمنا" width="929" height="659" />
     </div>
   );
 }
@@ -109,6 +107,12 @@ export default function Home() {
 
   const generateStory = async () => {
     await document.fonts.load('900 54px "Lama Sans"');
+    const brandLogo = new Image();
+    await new Promise<void>((resolve, reject) => {
+      brandLogo.onload = () => resolve();
+      brandLogo.onerror = () => reject(new Error("logo"));
+      brandLogo.src = "/tahmna-logo.svg";
+    });
     const canvas = document.createElement("canvas");
     canvas.width = 1080;
     canvas.height = 1920;
@@ -128,11 +132,9 @@ export default function Home() {
     ctx.direction = "rtl";
     ctx.textAlign = "right";
     ctx.fillStyle = campaignConfig.colors.cream;
-    ctx.font = '700 48px "Lama Sans", Arial';
-    ctx.fillText("سويتر", 920, 125);
-    ctx.fillStyle = campaignConfig.colors.accent;
-    ctx.font = '900 92px "Lama Sans", Arial';
-    ctx.fillText("تهمنا", 920, 230);
+    ctx.roundRect(745, 38, 250, 214, 34);
+    ctx.fill();
+    ctx.drawImage(brandLogo, 780, 68, 180, 128);
     ctx.fillStyle = campaignConfig.colors.cream;
     ctx.font = '600 30px "Lama Sans", Arial';
     ctx.fillText("حاسبة وقتك في السيارة", 430, 145);
@@ -144,7 +146,7 @@ export default function Home() {
     ctx.fillStyle = "#ffffff";
     ctx.font = '900 56px "Lama Sans", Arial';
     ctx.textAlign = "center";
-    ctx.fillText(`يا ${displayName}، هذه نتيجتك`, 540, 438, 780);
+    ctx.fillText(`${displayName}، هذه نتيجتك`, 540, 438, 780);
 
     ctx.fillStyle = campaignConfig.colors.ink;
     ctx.font = '700 42px "Lama Sans", Arial';
@@ -325,7 +327,7 @@ export default function Home() {
               />
             </div>
             {nameError && <p className="field-error name-error" id="name-error" role="alert">{nameError}</p>}
-            {displayName && <p className="name-preview" aria-live="polite">يا {displayName}، جاهز تعرف الصدمة؟</p>}
+            {displayName && <p className="name-preview" aria-live="polite">{displayName}، جاهز تعرف الصدمة؟</p>}
             <div className="form-divider"><span>والحين نبدأ</span></div>
             <label htmlFor="minutes">كم دقيقة تقضيها يوميًا في السيارة؟</label>
             <div className="number-field" data-suffix="دقيقة">
@@ -371,7 +373,7 @@ export default function Home() {
         <section className="panel loading-panel" aria-live="polite" aria-busy="true">
           <div className="loading-orbit"><span className="loading-number">{englishDigits.format(minutes)}</span><small>دقيقة</small></div>
           <div className="road"><span className="car" aria-hidden="true">🚙</span><i /><i /><i /><i /></div>
-          <h1>يا {displayName}، جالسين نحسب مشاويرك…</h1>
+          <h1>{displayName}، جالسين نحسب مشاويرك…</h1>
           <p>نجمع دقائقك، نعدّ ساعاتك، ونجهّز لك الصدمة.</p>
           <div className="calendar-flip" aria-hidden="true"><span>365</span><small>يوم</small></div>
         </section>
@@ -380,9 +382,9 @@ export default function Home() {
       {screen === "result" && (
         <section className="panel result-panel" aria-labelledby="result-title">
           <div className="eyebrow"><i /> نتيجتك</div>
-          <h1 id="result-title">يا {displayName}… وش ذا كله!</h1>
+          <h1 id="result-title">{displayName}… وش ذا كله!</h1>
           <div className="result-number"><strong>{formatNumber(days)}</strong><span>يومًا</span></div>
-          <p className="result-context">من سنتك يا {displayName} تقضيها داخل السيارة</p>
+          <p className="result-context">{displayName}، تقضي من سنتك هذا الوقت داخل السيارة</p>
 
           <div className="tier-card" style={{ "--tier-accent": tier.accent } as React.CSSProperties}>
             <div className="tier-heading"><span>شخصية {displayName}</span><h2>{tier.name}</h2></div>
@@ -417,7 +419,7 @@ export default function Home() {
           {discount && (
             <div className="discount-card">
               <div className="confetti" aria-hidden="true">✦　●　✦　●</div>
-              <p>كفو يا {displayName}! هذا كودك الخاص من سويتر.</p>
+              <p>كفو {displayName}! هذا كودك الخاص من سويتر.</p>
               <button className="code" onClick={copyCode} aria-label="نسخ كود الخصم"><span>{discount.code}</span><small>{copied ? "تم النسخ ✓" : "نسخ الكود"}</small></button>
               <a className="primary-button" href={campaignConfig.bookingUrl} target="_blank" rel="noreferrer" onClick={() => track("booking_clicked")}>استخدم الخصم واحجز الآن <span aria-hidden="true">←</span></a>
               <ul><li>{discount.value}</li><li>ينتهي في {discount.expiresAt}</li><li>{discount.terms}</li><li>يستخدم مرة واحدة فقط</li></ul>
