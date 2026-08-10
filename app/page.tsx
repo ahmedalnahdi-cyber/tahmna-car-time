@@ -70,9 +70,7 @@ function MemeMedia({ tier }: { tier: ResultTier }) {
         preload="auto"
         aria-label={`ميم شخصية ${tier.name}`}
       />
-      <span className="meme-label">ميم شخصية {tier.name}</span>
       {needsSoundTap && <button className="sound-button" type="button" onClick={enableSound}>شغّل الميم بالصوت 🔊</button>}
-      <span className="meme-caption">{tier.name}</span>
     </div>
   );
 }
@@ -197,17 +195,17 @@ export default function Home() {
     ctx.fillStyle = "#ffffff";
     ctx.font = '900 56px "Lama Sans", Arial';
     ctx.textAlign = "center";
-    ctx.fillText(`${displayName}، هذه نتيجتك`, 540, 438, 780);
+    ctx.fillText(`${displayName}… وش ذا كله!`, 540, 438, 780);
 
     ctx.fillStyle = campaignConfig.colors.ink;
     ctx.font = '700 42px "Lama Sans", Arial';
-    ctx.fillText("تقضي من سنتك داخل السيارة", 540, 570);
+    ctx.fillText("تقضيه من سنتك هذا الوقت داخل السيارة", 540, 570, 820);
     ctx.fillStyle = campaignConfig.colors.orange;
     ctx.font = '900 250px "Lama Sans", Arial';
     ctx.fillText(formatNumber(days), 540, 820);
     ctx.fillStyle = campaignConfig.colors.ink;
     ctx.font = '900 58px "Lama Sans", Arial';
-    ctx.fillText("يومًا كاملًا!", 540, 905);
+    ctx.fillText("يوم", 540, 905);
     ctx.fillStyle = "#6f675d";
     ctx.font = '700 34px "Lama Sans", Arial';
     ctx.fillText(`${englishDigits.format(minutes)} دقيقة يوميًا • ${englishDigits.format(hours)} ساعة سنويًا`, 540, 970);
@@ -242,7 +240,7 @@ export default function Home() {
     ctx.textAlign = "right";
     ctx.fillStyle = campaignConfig.colors.accent;
     ctx.font = '700 28px "Lama Sans", Arial';
-    ctx.fillText(`شخصية ${displayName}`, 900, 1145, 520);
+    ctx.fillText("شخصيتك هي", 900, 1145, 520);
     ctx.fillStyle = campaignConfig.colors.cream;
     ctx.font = '900 56px "Lama Sans", Arial';
     ctx.fillText(tier.name, 900, 1220, 520);
@@ -429,7 +427,7 @@ export default function Home() {
               }}
               style={{ "--range-progress": `${((Math.min(campaignConfig.calculator.max, Math.max(campaignConfig.calculator.min, Number(minutesInput) || campaignConfig.calculator.min)) - campaignConfig.calculator.min) / (campaignConfig.calculator.max - campaignConfig.calculator.min)) * 100}%` } as React.CSSProperties}
             />
-            <div className="range-labels" id="minutes-hint"><span>دقيقة واحدة</span><span>6 ساعات</span></div>
+            <div className="range-labels" id="minutes-hint"><span>دقيقة واحدة</span><span>240 دقيقة</span></div>
             {error && <p className="field-error" id="minutes-error" role="alert">{error}</p>}
             <button className="primary-button" onClick={calculate}>احسب وقتي <span aria-hidden="true">←</span></button>
           </div>
@@ -455,9 +453,13 @@ export default function Home() {
             <p className="result-context">تقضيه من سنتك هذا الوقت داخل السيارة</p>
 
           <div className="tier-card" style={{ "--tier-accent": tier.accent } as React.CSSProperties}>
-            <div className="tier-heading"><span>شخصية {displayName}</span><h2>{tier.name}</h2></div>
+            <div className="tier-heading">
+              <span className="tier-kicker">شخصيتك هي</span>
+              <h2>{tier.name}</h2>
+              <small>من {englishDigits.format(tier.min)} إلى {englishDigits.format(tier.max)} دقيقة يوميًا</small>
+            </div>
             <MemeMedia tier={tier} />
-            <blockquote>«{displayName}، {tier.message}»</blockquote>
+            <div className="tier-copy"><span>وصف الشخصية</span><blockquote>«{tier.message}»</blockquote></div>
           </div>
 
           <div className="stat-strip">
@@ -467,9 +469,9 @@ export default function Home() {
           </div>
 
           <div className="share-card">
-            <span className="share-sticker">جاهز للستوري ✦</span>
-            <h2>شاركنا نتيجتك وخذ<br />كود خصم خاص.</h2>
-            <p>جهزناها باسمك وبهويّة اللعبة، شاركها في الستوري وخل أصحابك يحسبون وقتهم.</p>
+            <span className="share-sticker">بطاقتك جاهزة ✦</span>
+            <div className="share-card-copy"><span>شارك النتيجة</span><h2>خذ نتيجتك معك.</h2>
+            <p>بطاقة مرتبة باسمك، نتيجتك، شخصيتك والميم الخاص فيها — جاهزة للستوري.</p></div>
             <button className="primary-button" onClick={share} disabled={sharing}>
               {sharing ? "جالسين نجهّز بطاقتك…" : "شارك نتيجتي"} <span aria-hidden="true">↗</span>
             </button>
