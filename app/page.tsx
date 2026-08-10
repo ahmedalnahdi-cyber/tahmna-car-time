@@ -9,6 +9,7 @@ type Discount = { code: string; value: string; expiresAt: string; terms: string 
 
 const englishDigits = new Intl.NumberFormat("en-US", { maximumFractionDigits: 1 });
 const formatNumber = (value: number) => englishDigits.format(Math.abs(value - Math.round(value)) < 0.05 ? Math.round(value) : value);
+const getMemeVideo = (tier: ResultTier) => `/memes/${tier.id}.mp4`;
 const track = (name: string, detail: Record<string, unknown> = {}) => {
   window.dispatchEvent(new CustomEvent("tahmna-analytics", { detail: { name, ...detail } }));
   const dataLayer = (window as typeof window & { dataLayer?: Record<string, unknown>[] }).dataLayer;
@@ -62,14 +63,14 @@ function MemeMedia({ tier }: { tier: ResultTier }) {
       <video
         ref={videoRef}
         className="meme-video"
-        src="/memes/result-demo.mp4"
+        src={getMemeVideo(tier)}
         autoPlay
         loop
         playsInline
         preload="auto"
         aria-label={`ميم شخصية ${tier.name}`}
       />
-      <span className="meme-label">ميم تجريبي • جميع النتائج</span>
+      <span className="meme-label">ميم شخصية {tier.name}</span>
       {needsSoundTap && <button className="sound-button" type="button" onClick={enableSound}>شغّل الميم بالصوت 🔊</button>}
       <span className="meme-caption">{tier.name}</span>
     </div>
@@ -148,7 +149,7 @@ export default function Home() {
       brandLogo.src = "/tahmna-logo.svg";
     });
     const memeFrame = document.createElement("video");
-    memeFrame.src = "/memes/result-demo.mp4";
+    memeFrame.src = getMemeVideo(tier);
     memeFrame.muted = true;
     memeFrame.playsInline = true;
     memeFrame.preload = "auto";
