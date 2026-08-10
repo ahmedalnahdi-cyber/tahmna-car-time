@@ -154,15 +154,26 @@ export default function Home() {
     memeFrame.playsInline = true;
     memeFrame.preload = "auto";
     await new Promise<void>((resolve, reject) => {
-      memeFrame.onloadeddata = () => resolve();
+      memeFrame.onloadedmetadata = () => resolve();
       memeFrame.onerror = () => reject(new Error("meme"));
       memeFrame.load();
     });
-    if (Number.isFinite(memeFrame.duration) && memeFrame.duration > 0.5) {
+    if (Number.isFinite(memeFrame.duration) && memeFrame.duration > 0.2) {
+      const captureTime = Math.min(Math.max(memeFrame.duration * 0.35, 0.5), memeFrame.duration - 0.1);
       await new Promise<void>((resolve) => {
         memeFrame.onseeked = () => resolve();
-        memeFrame.currentTime = 0.5;
+        memeFrame.currentTime = captureTime;
       });
+    }
+    try {
+      await memeFrame.play();
+      await new Promise<void>((resolve) => {
+        if ("requestVideoFrameCallback" in memeFrame) memeFrame.requestVideoFrameCallback(() => resolve());
+        else window.setTimeout(resolve, 250);
+      });
+      memeFrame.pause();
+    } catch {
+      await new Promise<void>((resolve) => window.setTimeout(resolve, 250));
     }
     const canvas = document.createElement("canvas");
     canvas.width = 1080;
@@ -207,7 +218,7 @@ export default function Home() {
     ctx.font = '900 54px "Lama Sans", Arial';
     ctx.fillText("يوم", 540, 700);
     ctx.font = '700 38px "Lama Sans", Arial';
-    ctx.fillText("تقضيه من سنتك هذا الوقت داخل السيارة", 540, 775, 850);
+    ctx.fillText("تقضيه من سنتك داخل السيارة", 540, 775, 850);
     ctx.fillStyle = campaignConfig.colors.accent;
     ctx.roundRect(190, 820, 700, 72, 36);
     ctx.fill();
@@ -455,7 +466,7 @@ export default function Home() {
           <div className="eyebrow"><i /> نتيجتك</div>
           <h1 id="result-title">{displayName}… وش ذا كله!</h1>
             <div className="result-number"><strong>{formatNumber(days)}</strong><span>يوم</span></div>
-            <p className="result-context">تقضيه من سنتك هذا الوقت داخل السيارة</p>
+            <p className="result-context">تقضيه من سنتك داخل السيارة</p>
 
           <div className="tier-card" style={{ "--tier-accent": tier.accent } as React.CSSProperties}>
             <div className="tier-heading"><span>شخصية {displayName}</span><h2>{tier.name}</h2></div>
