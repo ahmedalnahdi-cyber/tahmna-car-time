@@ -385,7 +385,7 @@ export default function Home() {
         <section className="panel input-panel" aria-labelledby="calculator-title">
           <div className="hero-mark" aria-hidden="true"><span>تهمـ</span><span>نا!</span></div>
           <div className="eyebrow"><i /> حاسبة وقتك في السيارة</div>
-          <h1 id="calculator-title">كم يوم من سنتك<br />تقضيه <em>داخل سيارتك؟</em></h1>
+          <h1 id="calculator-title">كم يوم في السنة<br />تقضيه <em>داخل سيارتك؟</em></h1>
           <p className="intro">حط متوسط وقتك اليومي في السيارة… ويمكن النتيجة تصدمك شوي.</p>
 
           <div className="calculator-card">
