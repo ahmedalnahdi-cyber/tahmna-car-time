@@ -315,15 +315,15 @@ export default function Home() {
     track("discount_revealed");
   };
 
-  const share = async (platform: "general" | "snapchat" | "whatsapp" | "instagram" = "general") => {
+  const share = async () => {
     setSharing(true);
     setShareError("");
-    track("share_clicked", { platform });
+    track("share_clicked");
     try {
       const file = await generateStory();
       const shareData = {
         files: [file],
-        title: platform === "general" ? "شارك نتيجتك" : `شارك نتيجتك عبر ${platform === "snapchat" ? "سناب شات" : platform === "whatsapp" ? "واتساب" : "إنستقرام"}`,
+        title: "شارك نتيجتك",
         text: `أنا ${displayName} وطلعت أقضي ${formatNumber(days)} يومًا من سنتي داخل السيارة 😅 احسب نتيجتك أنت بعد. ${campaignConfig.brand.hashtag}`,
       };
       if (navigator.share && navigator.canShare?.({ files: [file] })) {
@@ -482,16 +482,11 @@ export default function Home() {
             <span className="share-sticker">جاهز للستوري ✦</span>
             <h2>شاركنا نتيجتك وخذ<br />كود خصم خاص.</h2>
             <p>جهزناها باسمك، شاركها في الستوري وخل أصحابك يحسبون وقتهم.</p>
-            <button className="primary-button" onClick={() => share()} disabled={sharing}>
+            <button className="primary-button" onClick={share} disabled={sharing}>
               {sharing ? "جالسين نجهّز بطاقتك…" : "شارك نتيجتي"} <span aria-hidden="true">↗</span>
             </button>
-            <div className="share-platforms" aria-label="خيارات مشاركة النتيجة">
-              <button type="button" onClick={() => share("snapchat")} disabled={sharing}><span aria-hidden="true">👻</span> سناب</button>
-              <button type="button" onClick={() => share("whatsapp")} disabled={sharing}><span aria-hidden="true">◉</span> واتساب</button>
-              <button type="button" onClick={() => share("instagram")} disabled={sharing}><span aria-hidden="true">◎</span> إنستقرام</button>
-            </div>
-            <small className="share-hint">تفتح نافذة المشاركة في جوالك لتختار الستوري داخل التطبيق.</small>
-            {shareError && <div className="share-error" role="alert"><span>{shareError}</span><button onClick={() => share()}>إعادة المحاولة</button></div>}
+            <small className="share-hint">يفتح خيارات المشاركة في جوالك لتختار سناب أو واتساب أو إنستقرام.</small>
+            {shareError && <div className="share-error" role="alert"><span>{shareError}</span><button onClick={share}>إعادة المحاولة</button></div>}
           </div>
 
           {fallbackOpen && (
