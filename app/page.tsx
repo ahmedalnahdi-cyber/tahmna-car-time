@@ -77,6 +77,7 @@ function MemeMedia({ tier }: { tier: ResultTier }) {
     <div className="meme-media" style={{ "--tier-accent": tier.accent } as React.CSSProperties}>
       <video
         ref={videoRef}
+        id="result-meme-video"
         className="meme-video"
         src={getMemeVideo(tier)}
         autoPlay
@@ -187,92 +188,95 @@ export default function Home() {
       brandLogo.onerror = () => reject(new Error("logo"));
       brandLogo.src = "/tahmna-logo.svg";
     });
-    const memeFrame = document.createElement("video");
-    memeFrame.src = getMemeVideo(tier);
-    memeFrame.muted = true;
-    memeFrame.playsInline = true;
-    memeFrame.preload = "auto";
-    await new Promise<void>((resolve, reject) => {
-      memeFrame.onloadedmetadata = () => resolve();
-      memeFrame.onerror = () => reject(new Error("meme"));
-      memeFrame.load();
-    });
-    if (Number.isFinite(memeFrame.duration) && memeFrame.duration > 0.2) {
-      const captureTime = Math.min(Math.max(memeFrame.duration * 0.35, 0.5), memeFrame.duration - 0.1);
-      await new Promise<void>((resolve) => {
-        memeFrame.onseeked = () => resolve();
-        memeFrame.currentTime = captureTime;
+    // التقاط الفيديو الظاهر نفسه أكثر موثوقية على Safari من إنشاء فيديو جديد وقت المشاركة.
+    let memeFrame = document.querySelector<HTMLVideoElement>("#result-meme-video");
+    if (!memeFrame || memeFrame.readyState < HTMLMediaElement.HAVE_CURRENT_DATA || !memeFrame.videoWidth) {
+      memeFrame = document.createElement("video");
+      memeFrame.src = getMemeVideo(tier);
+      memeFrame.muted = true;
+      memeFrame.playsInline = true;
+      memeFrame.preload = "auto";
+      memeFrame.style.cssText = "position:fixed;width:2px;height:2px;opacity:.01;pointer-events:none;left:0;bottom:0";
+      document.body.appendChild(memeFrame);
+      await new Promise<void>((resolve, reject) => {
+        memeFrame!.onloadeddata = () => resolve();
+        memeFrame!.onerror = () => reject(new Error("meme"));
+        memeFrame!.load();
       });
-    }
-    try {
-      await memeFrame.play();
+      const captureTime = Math.min(Math.max(memeFrame.duration * 0.35, 0.4), Math.max(memeFrame.duration - 0.1, 0));
+      if (captureTime > 0) {
+        await new Promise<void>((resolve) => {
+          memeFrame!.onseeked = () => resolve();
+          memeFrame!.currentTime = captureTime;
+        });
+      }
       await new Promise<void>((resolve) => {
-        if ("requestVideoFrameCallback" in memeFrame) memeFrame.requestVideoFrameCallback(() => resolve());
-        else window.setTimeout(resolve, 250);
+        if ("requestVideoFrameCallback" in memeFrame!) memeFrame!.requestVideoFrameCallback(() => resolve());
+        else window.setTimeout(resolve, 350);
       });
-      memeFrame.pause();
-    } catch {
-      await new Promise<void>((resolve) => window.setTimeout(resolve, 250));
     }
     const canvas = document.createElement("canvas");
     canvas.width = 1080;
     canvas.height = 1920;
     const ctx = canvas.getContext("2d");
     if (!ctx) throw new Error("canvas");
+    const fillRoundRect = (x: number, y: number, width: number, height: number, radius: number) => {
+      ctx.beginPath();
+      ctx.roundRect(x, y, width, height, radius);
+      ctx.fill();
+    };
+    const strokeRoundRect = (x: number, y: number, width: number, height: number, radius: number) => {
+      ctx.beginPath();
+      ctx.roundRect(x, y, width, height, radius);
+      ctx.stroke();
+    };
 
-    ctx.fillStyle = campaignConfig.colors.cream;
+    const accent = tier.accent || campaignConfig.colors.accent;
+    const cardGradient = ctx.createLinearGradient(0, 0, 1080, 1920);
+    cardGradient.addColorStop(0, "#0e0d0b");
+    cardGradient.addColorStop(.58, campaignConfig.colors.ink);
+    cardGradient.addColorStop(1, "#080807");
+    ctx.fillStyle = cardGradient;
     ctx.fillRect(0, 0, 1080, 1920);
-    ctx.fillStyle = "rgba(23, 21, 18, 0.12)";
-    for (let y = 260; y < 1880; y += 30) {
-      for (let x = 25; x < 1060; x += 30) ctx.fillRect(x, y, 2, 2);
-    }
+    const glow = ctx.createRadialGradient(900, 240, 20, 900, 240, 760);
+    glow.addColorStop(0, `${accent}88`);
+    glow.addColorStop(1, "rgba(19,137,255,0)");
+    ctx.fillStyle = glow;
+    ctx.fillRect(0, 0, 1080, 1000);
+    ctx.strokeStyle = campaignConfig.colors.orange;
+    ctx.lineWidth = 10;
+    strokeRoundRect(34, 34, 1012, 1852, 58);
+    ctx.strokeStyle = "rgba(255,248,234,.28)";
+    ctx.lineWidth = 2;
+    strokeRoundRect(54, 54, 972, 1812, 45);
+    ctx.fillStyle = "rgba(255,255,255,.07)";
+    for (let y = 90; y < 1840; y += 38) for (let x = 80; x < 1020; x += 38) ctx.fillRect(x, y, 2, 2);
 
-    // رأس بسيط وواضح بهوية الحملة.
-    ctx.fillStyle = campaignConfig.colors.ink;
-    ctx.fillRect(0, 0, 1080, 230);
-    ctx.fillStyle = campaignConfig.colors.orange;
-    ctx.fillRect(0, 214, 1080, 16);
+    // ترويسة إصدار قابلة للجمع.
     ctx.fillStyle = campaignConfig.colors.cream;
-    ctx.roundRect(790, 28, 210, 174, 28);
-    ctx.fill();
+    fillRoundRect(785, 76, 205, 142, 28);
     ctx.direction = "rtl";
     ctx.textAlign = "right";
-    ctx.drawImage(brandLogo, 825, 48, 140, 100);
+    ctx.drawImage(brandLogo, 827, 88, 120, 86);
+    const tierNumber = Number(tier.id.match(/\d+/)?.[0] ?? 1);
     ctx.fillStyle = campaignConfig.colors.cream;
-    ctx.font = '900 42px "Lama Sans", Arial';
-    ctx.fillText("حاسبة وقتك في السيارة", 700, 105);
-    ctx.font = '600 26px "Lama Sans", Arial';
-    ctx.fillStyle = "#bdb5a8";
-    ctx.fillText("من تهمنا", 700, 152);
-
-    // النتيجة الرئيسية: الاسم مرة واحدة ثم الرقم.
-    ctx.fillStyle = campaignConfig.colors.ink;
-    ctx.font = '900 68px "Lama Sans", Arial';
+    ctx.font = '900 37px "Lama Sans", Arial';
+    ctx.fillText("بطاقة وقت السيارة", 730, 120);
+    ctx.fillStyle = "rgba(255,248,234,.66)";
+    ctx.font = '700 23px "Lama Sans", Arial';
+    ctx.fillText(`إصدار تهمنا  •  ${String(tierNumber).padStart(2, "0")} / 18`, 730, 163);
+    ctx.fillStyle = accent;
+    fillRoundRect(80, 82, 190, 58, 29);
+    ctx.fillStyle = "#fff";
     ctx.textAlign = "center";
-    ctx.fillText(`${displayName}… وش ذا كله!`, 540, 350, 880);
-    ctx.fillStyle = campaignConfig.colors.orange;
-    ctx.font = '900 270px "Lama Sans", Arial';
-    ctx.fillText(formatNumber(days), 540, 625);
-    ctx.fillStyle = campaignConfig.colors.ink;
-    ctx.font = '900 54px "Lama Sans", Arial';
-    ctx.fillText("يوم", 540, 700);
-    ctx.font = '700 38px "Lama Sans", Arial';
-    ctx.fillText("تقضيه من سنتك داخل السيارة", 540, 775, 850);
-    ctx.fillStyle = campaignConfig.colors.accent;
-    ctx.roundRect(190, 820, 700, 72, 36);
-    ctx.fill();
-    ctx.fillStyle = "#ffffff";
-    ctx.font = '700 29px "Lama Sans", Arial';
-    ctx.fillText(`${englishDigits.format(minutes)} دقيقة يوميًا  •  ${englishDigits.format(hours)} ساعة سنويًا`, 540, 866, 640);
+    ctx.font = '900 23px "Lama Sans", Arial';
+    ctx.fillText("COLLECTIBLE", 175, 120);
 
-    // الميم هو بطل بطاقة الشخصية.
-    ctx.fillStyle = campaignConfig.colors.ink;
-    ctx.roundRect(80, 950, 920, 590, 48);
-    ctx.fill();
-    const frameX = 110;
-    const frameY = 980;
-    const frameWidth = 860;
-    const frameHeight = 350;
+    // الرياكشن هو الواجهة الأساسية للبطاقة.
+    const frameX = 80;
+    const frameY = 260;
+    const frameWidth = 920;
+    const frameHeight = 620;
     const sourceRatio = memeFrame.videoWidth / memeFrame.videoHeight;
     const targetRatio = frameWidth / frameHeight;
     let sourceX = 0;
@@ -287,22 +291,49 @@ export default function Home() {
       sourceY = (memeFrame.videoHeight - sourceHeight) / 2;
     }
     ctx.save();
+    ctx.shadowColor = `${accent}aa`;
+    ctx.shadowBlur = 45;
     ctx.beginPath();
-    ctx.roundRect(frameX, frameY, frameWidth, frameHeight, 30);
+    ctx.roundRect(frameX, frameY, frameWidth, frameHeight, 46);
     ctx.clip();
     ctx.drawImage(memeFrame, sourceX, sourceY, sourceWidth, sourceHeight, frameX, frameY, frameWidth, frameHeight);
+    const imageShade = ctx.createLinearGradient(0, frameY + 300, 0, frameY + frameHeight);
+    imageShade.addColorStop(0, "rgba(0,0,0,0)");
+    imageShade.addColorStop(1, "rgba(0,0,0,.86)");
+    ctx.fillStyle = imageShade;
+    ctx.fillRect(frameX, frameY, frameWidth, frameHeight);
     ctx.restore();
+    ctx.strokeStyle = campaignConfig.colors.cream;
+    ctx.lineWidth = 8;
+    strokeRoundRect(frameX, frameY, frameWidth, frameHeight, 46);
     ctx.textAlign = "center";
-    ctx.fillStyle = campaignConfig.colors.accent;
+    ctx.fillStyle = "#fff";
+    ctx.font = '900 64px "Lama Sans", Arial';
+    ctx.fillText(tier.name, 540, 785, 820);
+    ctx.fillStyle = accent;
     ctx.font = '800 26px "Lama Sans", Arial';
-    ctx.fillText("شخصيتك هي", 540, 1388);
+    ctx.fillText("شخصية نادرة مكتشفة", 540, 835);
+
+    // النتيجة والاسم بتسلسل قوي ومختصر.
     ctx.fillStyle = campaignConfig.colors.cream;
-    ctx.font = '900 58px "Lama Sans", Arial';
-    ctx.fillText(tier.name, 540, 1452, 820);
-    ctx.font = '700 29px "Lama Sans", Arial';
-    ctx.fillText(tier.message, 540, 1505, 820);
+    ctx.textAlign = "right";
+    ctx.font = '900 55px "Lama Sans", Arial';
+    ctx.fillText(`${displayName}… وش ذا كله!`, 960, 1010, 880);
     ctx.fillStyle = campaignConfig.colors.orange;
-    ctx.fillRect(390, 1522, 300, 7);
+    ctx.textAlign = "center";
+    ctx.font = '900 230px "Lama Sans", Arial';
+    ctx.fillText(formatNumber(days), 540, 1240);
+    ctx.fillStyle = campaignConfig.colors.cream;
+    ctx.font = '900 43px "Lama Sans", Arial';
+    ctx.fillText("يوم تقضيه من سنتك داخل السيارة", 540, 1320, 880);
+    ctx.fillStyle = accent;
+    fillRoundRect(160, 1360, 760, 76, 38);
+    ctx.fillStyle = "#fff";
+    ctx.font = '800 27px "Lama Sans", Arial';
+    ctx.fillText(`${englishDigits.format(minutes)} دقيقة يوميًا  •  ${englishDigits.format(hours)} ساعة سنويًا`, 540, 1408, 700);
+    ctx.fillStyle = "rgba(255,248,234,.72)";
+    ctx.font = '700 27px "Lama Sans", Arial';
+    ctx.fillText(tier.message, 540, 1490, 860);
 
     const qrUrl = await QRCode.toDataURL(campaignConfig.shareUrl, { width: 210, margin: 1, color: { dark: "#171512", light: "#fff8ea" } });
     const qr = new Image();
@@ -311,22 +342,20 @@ export default function Home() {
       qr.onerror = () => reject(new Error("qr"));
       qr.src = qrUrl;
     });
-    ctx.fillStyle = campaignConfig.colors.orange;
-    ctx.roundRect(80, 1600, 920, 240, 42);
-    ctx.fill();
     ctx.fillStyle = campaignConfig.colors.cream;
-    ctx.roundRect(755, 1625, 190, 190, 18);
-    ctx.fill();
-    ctx.drawImage(qr, 770, 1640, 160, 160);
+    fillRoundRect(80, 1570, 920, 230, 42);
+    ctx.fillStyle = "#fff";
+    fillRoundRect(770, 1592, 186, 186, 20);
+    ctx.drawImage(qr, 783, 1605, 160, 160);
     ctx.textAlign = "right";
-    ctx.fillStyle = "#ffffff";
-    ctx.font = '900 44px "Lama Sans", Arial';
-    ctx.fillText("كم تقضي أنت؟", 690, 1680);
-    ctx.font = '700 29px "Lama Sans", Arial';
-    ctx.fillText("صوّر الكود واحسب وقتك", 690, 1732);
     ctx.fillStyle = campaignConfig.colors.ink;
-    ctx.font = '900 28px "Lama Sans", Arial';
-    ctx.fillText(campaignConfig.brand.hashtag, 690, 1792);
+    ctx.font = '900 42px "Lama Sans", Arial';
+    ctx.fillText("اكتشف بطاقتك", 710, 1642);
+    ctx.font = '700 27px "Lama Sans", Arial';
+    ctx.fillText("امسح الكود واحسب وقتك", 710, 1692);
+    ctx.fillStyle = campaignConfig.colors.orange;
+    ctx.font = '900 27px "Lama Sans", Arial';
+    ctx.fillText(campaignConfig.brand.hashtag, 710, 1748);
 
     const blob = await new Promise<Blob | null>((resolve) => canvas.toBlob(resolve, "image/jpeg", 0.92));
     if (!blob) throw new Error("blob");
