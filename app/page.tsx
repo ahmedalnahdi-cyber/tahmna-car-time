@@ -10,6 +10,12 @@ type Discount = { code: string; value: string; expiresAt: string; terms: string 
 const englishDigits = new Intl.NumberFormat("en-US", { maximumFractionDigits: 1 });
 const formatNumber = (value: number) => englishDigits.format(Math.abs(value - Math.round(value)) < 0.05 ? Math.round(value) : value);
 const getMemeVideo = (tier: ResultTier) => `/memes/${tier.id}.mp4`;
+const socialLinks = [
+  { label: "إنستقرام", short: "IG", href: "https://www.instagram.com/sweater_sa/" },
+  { label: "تيك توك", short: "TT", href: "https://www.tiktok.com/@sweater_sa" },
+  { label: "إكس", short: "X", href: "https://x.com/sweater_sa" },
+  { label: "سناب شات", short: "SC", href: "https://www.snapchat.com/add/sweater_sa" },
+];
 const track = (name: string, detail: Record<string, unknown> = {}) => {
   window.dispatchEvent(new CustomEvent("tahmna-analytics", { detail: { name, ...detail } }));
   const dataLayer = (window as typeof window & { dataLayer?: Record<string, unknown>[] }).dataLayer;
@@ -519,7 +525,24 @@ export default function Home() {
         </section>
       )}
 
-      <footer><span>مهما كانت النتيجة…</span></footer>
+      <footer>
+        <div className="footer-inner">
+          <div className="footer-brand">
+            <span className="footer-logo"><img src="/tahmna-logo.svg" alt="تهمنا من سويتر" /></span>
+            <div><strong>خلّنا قريبين.</strong><small>تابع حسابات سويتر لكل جديد.</small></div>
+          </div>
+          <nav className="footer-socials" aria-label="حسابات سويتر">
+            {socialLinks.map((social) => (
+              <a key={social.label} href={social.href} target="_blank" rel="noreferrer" aria-label={`سويتر على ${social.label}`} onClick={() => track("social_clicked", { platform: social.label })}>
+                <b aria-hidden="true">{social.short}</b><span>{social.label}</span>
+              </a>
+            ))}
+          </nav>
+          <a className="footer-app" href="https://sweater.go.link/" target="_blank" rel="noreferrer" onClick={() => track("app_download_clicked")}>
+            <span><small>متوفر على iOS وAndroid</small><strong>حمّل تطبيق سويتر</strong></span><b aria-hidden="true">↗</b>
+          </a>
+        </div>
+      </footer>
     </main>
   );
 }
