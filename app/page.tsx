@@ -70,9 +70,7 @@ function MemeMedia({ tier }: { tier: ResultTier }) {
         preload="auto"
         aria-label={`ميم شخصية ${tier.name}`}
       />
-      <span className="meme-label">ميم شخصية {tier.name}</span>
       {needsSoundTap && <button className="sound-button" type="button" onClick={enableSound}>شغّل الميم بالصوت 🔊</button>}
-      <span className="meme-caption">{tier.name}</span>
     </div>
   );
 }
@@ -317,14 +315,15 @@ export default function Home() {
     track("discount_revealed");
   };
 
-  const share = async () => {
+  const share = async (platform: "general" | "snapchat" | "whatsapp" | "instagram" = "general") => {
     setSharing(true);
     setShareError("");
-    track("share_clicked");
+    track("share_clicked", { platform });
     try {
       const file = await generateStory();
       const shareData = {
         files: [file],
+        title: platform === "general" ? "شارك نتيجتك" : `شارك نتيجتك عبر ${platform === "snapchat" ? "سناب شات" : platform === "whatsapp" ? "واتساب" : "إنستقرام"}`,
         text: `أنا ${displayName} وطلعت أقضي ${formatNumber(days)} يومًا من سنتي داخل السيارة 😅 احسب نتيجتك أنت بعد. ${campaignConfig.brand.hashtag}`,
       };
       if (navigator.share && navigator.canShare?.({ files: [file] })) {
@@ -383,7 +382,6 @@ export default function Home() {
 
       {screen === "input" && (
         <section className="panel input-panel" aria-labelledby="calculator-title">
-          <div className="hero-mark" aria-hidden="true"><span>تهمـ</span><span>نا!</span></div>
           <div className="eyebrow"><i /> حاسبة وقتك في السيارة</div>
           <h1 id="calculator-title">كم يوم في السنة<br />تقضيه <em>داخل سيارتك؟</em></h1>
           <p className="intro">حط متوسط وقتك اليومي في السيارة… ويمكن النتيجة تصدمك شوي.</p>
@@ -483,11 +481,17 @@ export default function Home() {
           <div className="share-card">
             <span className="share-sticker">جاهز للستوري ✦</span>
             <h2>شاركنا نتيجتك وخذ<br />كود خصم خاص.</h2>
-            <p>جهزناها باسمك وبهويّة اللعبة، شاركها في الستوري وخل أصحابك يحسبون وقتهم.</p>
-            <button className="primary-button" onClick={share} disabled={sharing}>
+            <p>جهزناها باسمك، شاركها في الستوري وخل أصحابك يحسبون وقتهم.</p>
+            <button className="primary-button" onClick={() => share()} disabled={sharing}>
               {sharing ? "جالسين نجهّز بطاقتك…" : "شارك نتيجتي"} <span aria-hidden="true">↗</span>
             </button>
-            {shareError && <div className="share-error" role="alert"><span>{shareError}</span><button onClick={share}>إعادة المحاولة</button></div>}
+            <div className="share-platforms" aria-label="خيارات مشاركة النتيجة">
+              <button type="button" onClick={() => share("snapchat")} disabled={sharing}><span aria-hidden="true">👻</span> سناب</button>
+              <button type="button" onClick={() => share("whatsapp")} disabled={sharing}><span aria-hidden="true">◉</span> واتساب</button>
+              <button type="button" onClick={() => share("instagram")} disabled={sharing}><span aria-hidden="true">◎</span> إنستقرام</button>
+            </div>
+            <small className="share-hint">تفتح نافذة المشاركة في جوالك لتختار الستوري داخل التطبيق.</small>
+            {shareError && <div className="share-error" role="alert"><span>{shareError}</span><button onClick={() => share()}>إعادة المحاولة</button></div>}
           </div>
 
           {fallbackOpen && (
@@ -512,7 +516,7 @@ export default function Home() {
         </section>
       )}
 
-      <footer><span>مهما كانت النتيجة…</span><strong>سيارتك تهمنا.</strong></footer>
+      <footer><span>مهما كانت النتيجة…</span></footer>
     </main>
   );
 }

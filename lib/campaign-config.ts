@@ -25,7 +25,7 @@ export const campaignConfig = {
   calculator: {
     min: 1,
     max: 240,
-    step: 5,
+    step: 1,
     defaultValue: 67,
   },
   shareUrl: "https://sweater.sa/tahmna",
