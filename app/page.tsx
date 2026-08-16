@@ -287,9 +287,9 @@ export default function Home() {
     ctx.font = '900 28px "Lama Sans", Arial';
     ctx.fillText(campaignConfig.brand.hashtag, 690, 1792);
 
-    const blob = await new Promise<Blob | null>((resolve) => canvas.toBlob(resolve, "image/png", 0.94));
+    const blob = await new Promise<Blob | null>((resolve) => canvas.toBlob(resolve, "image/jpeg", 0.92));
     if (!blob) throw new Error("blob");
-    return new File([blob], `نتيجة-${displayName}-تهمنا.png`, { type: "image/png" });
+    return new File([blob], `نتيجة-${displayName}-تهمنا.jpg`, { type: "image/jpeg" });
   };
 
   const downloadFile = (file: File) => {
@@ -319,8 +319,9 @@ export default function Home() {
     setSharing(true);
     setShareError("");
     track("share_clicked");
+    let file: File | null = null;
     try {
-      const file = await generateStory();
+      file = await generateStory();
       const shareData = {
         files: [file],
         title: "شارك نتيجتك",
@@ -338,7 +339,14 @@ export default function Home() {
       }
     } catch (shareFailure) {
       if (shareFailure instanceof DOMException && shareFailure.name === "AbortError") return;
-      setShareError("تعذر تجهيز الصورة هذه المرة. جرّب مرة ثانية.");
+      if (file) {
+        downloadFile(file);
+        setFallbackOpen(true);
+        track("share_fallback_downloaded", { reason: "native_share_failed" });
+        await revealDiscount();
+      } else {
+        setShareError("تعذر تجهيز الصورة هذه المرة. جرّب مرة ثانية.");
+      }
     } finally {
       setSharing(false);
     }
@@ -492,8 +500,8 @@ export default function Home() {
           {fallbackOpen && (
             <div className="fallback-box" role="status">
               <h3>حفظنا لك النتيجة 🎉</h3>
-              <p>افتح Instagram، اختر Story، وارفع الصورة.</p>
-              <div><button onClick={downloadAgain}>تحميل الصورة</button><button onClick={copyShareText}>نسخ نص المشاركة</button></div>
+              <p>إذا ما ظهرت المشاركة المباشرة، افتح سناب أو إنستقرام وارفع الصورة من ألبوم الصور.</p>
+              <div><button onClick={downloadAgain}>حفظ الصورة مرة ثانية</button><button onClick={copyShareText}>نسخ نص المشاركة</button></div>
             </div>
           )}
 
