@@ -3,24 +3,23 @@ import path from "node:path";
 import sharp from "sharp";
 
 const tiers = [
-  ["meme-tier-1", "الضيف الخفيف", "#72d7ff"],
+  ["meme-tier-1", "المحسود", "#72d7ff"],
   ["meme-tier-2", "راعي المشاوير الخفيفة", "#1389ff"],
-  ["meme-tier-3", "مشوار على السريع", "#ffb238"],
-  ["meme-tier-4", "رفيق الإشارة", "#ff7a50"],
-  ["meme-tier-5", "خبير الاختصارات", "#b99cff"],
-  ["meme-tier-6", "ابن الطريق", "#ff5a1f"],
+  ["meme-tier-3", "المحظوظ", "#ffb238"],
+  ["meme-tier-4", "جديد عالزحمة", "#ff7a50"],
+  ["meme-tier-6", "مدرك الإشارات", "#ff5a1f"],
   ["meme-tier-7", "صاحب الخط", "#72d7ff"],
-  ["meme-tier-8", "مندوب نفسه", "#1389ff"],
+  ["meme-tier-8", "شيخ المخارج", "#1389ff"],
   ["meme-tier-9", "موظف السيارة", "#ffb238"],
-  ["meme-tier-10", "مدير المشاوير", "#ff7a50"],
-  ["meme-tier-11", "خبير الزحمة", "#b99cff"],
+  ["meme-tier-10", "ساكن في الدائري", "#ff7a50"],
+  ["meme-tier-11", "راعي الهواجيس", "#b99cff"],
   ["meme-tier-12", "راعي المسار الطويل", "#ff5a1f"],
-  ["meme-tier-13", "دوام متنقل", "#72d7ff"],
+  ["meme-tier-13", "ضحية الدائري", "#72d7ff"],
   ["meme-tier-14", "ساكن على الطريق", "#1389ff"],
-  ["meme-tier-15", "مستأجر السيارة", "#ffb238"],
-  ["meme-tier-16", "صاحب المجلس المتنقل", "#ff7a50"],
-  ["meme-tier-17", "مالك العقار", "#b99cff"],
-  ["meme-tier-18", "شيخ الخطوط", "#ff5a1f"],
+  ["meme-tier-15", "خوي المحطات", "#ffb238"],
+  ["meme-tier-16", "راعي خطوط", "#ff7a50"],
+  ["meme-tier-17", "الكداد", "#b99cff"],
+  ["meme-tier-18", "المراثوني", "#ff5a1f"],
 ];
 
 const output = path.resolve("public/snap-stickers");

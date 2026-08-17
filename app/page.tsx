@@ -107,6 +107,7 @@ export default function Home() {
   const days = useMemo(() => (minutes * 365) / 1440, [minutes]);
   const hours = useMemo(() => Math.round((minutes * 365) / 60), [minutes]);
   const tier = useMemo(() => getTier(minutes), [minutes]);
+  const tierPosition = useMemo(() => campaignConfig.tiers.findIndex((item) => item.id === tier.id) + 1, [tier.id]);
   const displayName = useMemo(() => nameInput.trim().replace(/\s+/g, " "), [nameInput]);
   const snapShareUrl = useMemo(() => {
     const params = new URLSearchParams({ name: displayName, days: formatNumber(days), tier: tier.name, v: "2" });
@@ -255,13 +256,12 @@ export default function Home() {
     ctx.direction = "rtl";
     ctx.textAlign = "right";
     ctx.drawImage(brandLogo, 827, 88, 120, 86);
-    const tierNumber = Number(tier.id.match(/\d+/)?.[0] ?? 1);
     ctx.fillStyle = campaignConfig.colors.cream;
     ctx.font = '900 37px "Lama Sans", Arial';
     ctx.fillText("بطاقة وقت السيارة", 730, 120);
     ctx.fillStyle = "rgba(255,248,234,.66)";
     ctx.font = '700 23px "Lama Sans", Arial';
-    ctx.fillText(`إصدار تهمنا  •  ${String(tierNumber).padStart(2, "0")} / 18`, 730, 163);
+    ctx.fillText(`إصدار تهمنا  •  ${String(tierPosition).padStart(2, "0")} / ${campaignConfig.tiers.length}`, 730, 163);
     ctx.fillStyle = accent;
     fillRoundRect(80, 82, 190, 58, 29);
     ctx.fillStyle = "#fff";
@@ -554,7 +554,7 @@ export default function Home() {
           </div>
 
           <div className="share-card" style={{ "--share-accent": tier.accent } as React.CSSProperties}>
-            <div className="share-card-topline"><span>بطاقتك صارت جاهزة</span><b>#{String(Number(tier.id.match(/\d+/)?.[0] ?? 1)).padStart(2, "0")}/18</b></div>
+            <div className="share-card-topline"><span>بطاقتك صارت جاهزة</span><b>#{String(tierPosition).padStart(2, "0")}/{campaignConfig.tiers.length}</b></div>
             <div className="share-card-copy">
               <span className="share-card-mark" aria-hidden="true">✦</span>
               <div><h2>خلّ بطاقتك تنتشر.</h2><p>صورة ستوري كاملة باسمك ورياكشن شخصيتك.</p></div>
