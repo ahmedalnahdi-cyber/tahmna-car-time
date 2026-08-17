@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import QRCode from "qrcode";
+import { FaInstagram, FaSnapchat, FaTiktok, FaXTwitter } from "react-icons/fa6";
 import { campaignConfig, getTier, type ResultTier } from "../lib/campaign-config";
 
 type Screen = "input" | "calculating" | "result";
@@ -11,10 +12,10 @@ const englishDigits = new Intl.NumberFormat("en-US", { maximumFractionDigits: 1 
 const formatNumber = (value: number) => englishDigits.format(Math.abs(value - Math.round(value)) < 0.05 ? Math.round(value) : value);
 const getMemeVideo = (tier: ResultTier) => `/memes/${tier.id}.mp4`;
 const socialLinks = [
-  { label: "إنستقرام", short: "IG", href: "https://www.instagram.com/sweater_sa/" },
-  { label: "تيك توك", short: "TT", href: "https://www.tiktok.com/@sweater_sa" },
-  { label: "إكس", short: "X", href: "https://x.com/sweater_sa" },
-  { label: "سناب شات", short: "SC", href: "https://www.snapchat.com/add/sweater_sa" },
+  { label: "إنستقرام", icon: FaInstagram, href: "https://www.instagram.com/sweater_sa/" },
+  { label: "تيك توك", icon: FaTiktok, href: "https://www.tiktok.com/@sweater_sa" },
+  { label: "إكس", icon: FaXTwitter, href: "https://x.com/sweater_sa" },
+  { label: "سناب شات", icon: FaSnapchat, href: "https://www.snapchat.com/add/sweater_sa" },
 ];
 const track = (name: string, detail: Record<string, unknown> = {}) => {
   window.dispatchEvent(new CustomEvent("tahmna-analytics", { detail: { name, ...detail } }));
@@ -609,7 +610,7 @@ export default function Home() {
           <nav className="footer-socials" aria-label="حسابات سويتر">
             {socialLinks.map((social) => (
               <a key={social.label} href={social.href} target="_blank" rel="noreferrer" aria-label={`سويتر على ${social.label}`} onClick={() => track("social_clicked", { platform: social.label })}>
-                <b aria-hidden="true">{social.short}</b><span>{social.label}</span>
+                <b aria-hidden="true"><social.icon /></b><span>{social.label}</span>
               </a>
             ))}
           </nav>
