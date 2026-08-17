@@ -109,7 +109,7 @@ export default function Home() {
   const tier = useMemo(() => getTier(minutes), [minutes]);
   const displayName = useMemo(() => nameInput.trim().replace(/\s+/g, " "), [nameInput]);
   const snapShareUrl = useMemo(() => {
-    const params = new URLSearchParams({ name: displayName, days: formatNumber(days), tier: tier.name });
+    const params = new URLSearchParams({ name: displayName, days: formatNumber(days), tier: tier.name, v: "2" });
     return `https://tahmna-car-time.a7medalnahdi.chatgpt.site/snap?${params.toString()}`;
   }, [days, displayName, tier.name]);
 

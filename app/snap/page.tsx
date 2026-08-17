@@ -14,16 +14,12 @@ export async function generateMetadata({ searchParams }: { searchParams: SnapSea
   const tier = clean(params.tier, "شخصية تهمنا");
   const title = `${name} يقضي ${days} يوم داخل السيارة!`;
   const description = `شخصيته: ${tier}. اكتشف بطاقتك أنت في حاسبة تهمنا من سويتر.`;
-  const tierId = campaignConfig.tiers.find((item) => item.name === tier)?.id ?? campaignConfig.tiers[0].id;
-  const sticker = `https://tahmna-car-time.a7medalnahdi.chatgpt.site/snap-stickers/${tierId}.png`;
-
   return {
     title,
     description,
     openGraph: { title, description, siteName: "تهمنا من سويتر", locale: "ar_SA", type: "website", images: [] },
     twitter: { card: "summary", title, description, images: [] },
     alternates: { canonical: "/snap" },
-    other: { "snapchat:sticker": sticker },
   };
 }
 
@@ -32,9 +28,12 @@ export default async function SnapResultPage({ searchParams }: { searchParams: S
   const name = clean(params.name, "صاحب البطاقة", 28);
   const days = clean(params.days, "؟", 8);
   const tier = clean(params.tier, "شخصية تهمنا");
+  const tierId = campaignConfig.tiers.find((item) => item.name === tier)?.id ?? campaignConfig.tiers[0].id;
+  const sticker = `https://tahmna-car-time.a7medalnahdi.chatgpt.site/snap-stickers/${tierId}.png`;
 
   return (
     <main className="snap-landing" dir="rtl">
+      <meta property="snapchat:sticker" content={sticker} />
       <section>
         <img src="/tahmna-logo.svg" alt="تهمنا" width="170" height="120" />
         <span>بطاقة وقت السيارة</span>
