@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { campaignConfig } from "../../lib/campaign-config";
 
-type SnapSearchParams = Promise<{ name?: string; days?: string; tier?: string }>;
+type SnapSearchParams = Promise<{ name?: string; days?: string; minutes?: string; tier?: string }>;
 
 const clean = (value: string | undefined, fallback: string, max = 48) =>
   (value ?? fallback).replace(/[<>]/g, "").trim().slice(0, max) || fallback;
@@ -28,8 +27,8 @@ export default async function SnapResultPage({ searchParams }: { searchParams: S
   const name = clean(params.name, "صاحب البطاقة", 28);
   const days = clean(params.days, "؟", 8);
   const tier = clean(params.tier, "شخصية تهمنا");
-  const tierId = campaignConfig.tiers.find((item) => item.name === tier)?.id ?? campaignConfig.tiers[0].id;
-  const sticker = `https://tahmna-car-time.a7medalnahdi.chatgpt.site/snap-stickers/${tierId}.png`;
+  const minutes = Math.min(240, Math.max(1, Math.round(Number(params.minutes) || 1)));
+  const sticker = `https://tahmna-car-time.a7medalnahdi.chatgpt.site/snap-stickers/result-${minutes}.png`;
 
   return (
     <main className="snap-landing" dir="rtl">

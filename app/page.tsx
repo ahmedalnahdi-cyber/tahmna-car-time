@@ -111,9 +111,9 @@ export default function Home() {
   const tierPosition = useMemo(() => campaignConfig.tiers.findIndex((item) => item.id === tier.id) + 1, [tier.id]);
   const displayName = useMemo(() => nameInput.trim().replace(/\s+/g, " "), [nameInput]);
   const snapShareUrl = useMemo(() => {
-    const params = new URLSearchParams({ name: displayName, days: formatNumber(days), tier: tier.name, v: "2" });
+    const params = new URLSearchParams({ name: displayName, days: formatNumber(days), minutes: String(minutes), tier: tier.name, v: "3" });
     return `https://tahmna-car-time.a7medalnahdi.chatgpt.site/snap?${params.toString()}`;
-  }, [days, displayName, tier.name]);
+  }, [days, displayName, minutes, tier.name]);
 
   useEffect(() => track("calculator_opened"), []);
 
@@ -572,7 +572,7 @@ export default function Home() {
               onClick={() => { track("share_invoked", { platform: "snapchat_sticker" }); void revealDiscount(); }}
             >
               <span className="snap-ghost" aria-hidden="true">SC</span>
-              <span><strong>نسخة سناب</strong><small>يفتح سناب مع ستيكر نتيجتك — بدون حفظ</small></span>
+              <span><strong>ابدأ تحدي سناب</strong><small>رقم أيامك وشخصيتك جاهزة — ورّهم نتيجتك</small></span>
               <i aria-hidden="true">↗</i>
             </button>
             <small className="share-hint">يفتح زر المشاركة في جوالك مباشرة — اختر التطبيق اللي تبيه.</small>
