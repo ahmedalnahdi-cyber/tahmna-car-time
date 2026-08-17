@@ -22,6 +22,14 @@ const track = (name: string, detail: Record<string, unknown> = {}) => {
   dataLayer?.push({ event: name, ...detail });
 };
 
+const initializeSnapButtons = () => {
+  const snapWindow = window as typeof window & {
+    snap?: { creativekit?: { initalizeShareButtons?: (elements: HTMLCollectionOf<Element>) => void } };
+    snapKitInit?: () => void;
+  };
+  snapWindow.snap?.creativekit?.initalizeShareButtons?.(document.getElementsByClassName("snapchat-share-button"));
+};
+
 const getSessionId = () => {
   const key = "tahmna_anonymous_session";
   const existing = sessionStorage.getItem(key);
@@ -100,8 +108,32 @@ export default function Home() {
   const hours = useMemo(() => Math.round((minutes * 365) / 60), [minutes]);
   const tier = useMemo(() => getTier(minutes), [minutes]);
   const displayName = useMemo(() => nameInput.trim().replace(/\s+/g, " "), [nameInput]);
+  const snapShareUrl = useMemo(() => {
+    const params = new URLSearchParams({ name: displayName, days: formatNumber(days), tier: tier.name });
+    return `https://tahmna-car-time.a7medalnahdi.chatgpt.site/snap?${params.toString()}`;
+  }, [days, displayName, tier.name]);
 
   useEffect(() => track("calculator_opened"), []);
+
+  useEffect(() => {
+    const snapWindow = window as typeof window & { snapKitInit?: () => void };
+    snapWindow.snapKitInit = initializeSnapButtons;
+    if (document.getElementById("snapkit-creative-kit-sdk")) {
+      initializeSnapButtons();
+      return;
+    }
+    const script = document.createElement("script");
+    script.id = "snapkit-creative-kit-sdk";
+    script.src = "https://sdk.snapkit.com/js/v1/create.js";
+    script.async = true;
+    document.head.appendChild(script);
+  }, []);
+
+  useEffect(() => {
+    if (screen !== "result") return;
+    const frame = window.requestAnimationFrame(initializeSnapButtons);
+    return () => window.cancelAnimationFrame(frame);
+  }, [screen, snapShareUrl]);
 
   const markStarted = () => {
     if (!started.current) {
@@ -531,6 +563,16 @@ export default function Home() {
               <span className="share-button-icon" aria-hidden="true">↗</span>
               <span className="share-button-copy"><strong>{sharing ? "نصمّم بطاقتك الآن…" : "انشر بطاقتي"}</strong><small>{sharing ? "ثواني وتفتح لك المشاركة" : "صورة 1080 × 1920 جاهزة للستوري"}</small></span>
               <span className="share-button-arrow" aria-hidden="true">←</span>
+            </button>
+            <button
+              type="button"
+              className="snap-version-button snapchat-share-button"
+              data-share-url={snapShareUrl}
+              onClick={() => { track("share_invoked", { platform: "snapchat_sticker" }); void revealDiscount(); }}
+            >
+              <span className="snap-ghost" aria-hidden="true">SC</span>
+              <span><strong>نسخة سناب</strong><small>يفتح سناب مع ستيكر نتيجتك — بدون حفظ</small></span>
+              <i aria-hidden="true">↗</i>
             </button>
             <small className="share-hint">يفتح زر المشاركة في جوالك مباشرة — اختر التطبيق اللي تبيه.</small>
             {shareError && <div className="share-error" role="alert"><span>{shareError}</span><button onClick={share}>إعادة المحاولة</button></div>}
