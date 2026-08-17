@@ -44,6 +44,8 @@ function Brand() {
   return (
     <div className="brand" aria-label="سويتر - تهمنا">
       <img className="brand-logo" src="/tahmna-logo.svg" alt="شعار تهمنا" width="929" height="659" />
+      <span className="brand-divider" aria-hidden="true" />
+      <img className="sweater-logo sweater-logo-orange" src="/sweater-logo-orange.svg" alt="شعار سويتر" width="518" height="213" />
     </div>
   );
 }
@@ -182,11 +184,19 @@ export default function Home() {
   const generateStory = async () => {
     await document.fonts.load('900 54px "Lama Sans"');
     const brandLogo = new Image();
-    await new Promise<void>((resolve, reject) => {
-      brandLogo.onload = () => resolve();
-      brandLogo.onerror = () => reject(new Error("logo"));
-      brandLogo.src = "/tahmna-logo.svg";
-    });
+    const sweaterLogo = new Image();
+    await Promise.all([
+      new Promise<void>((resolve, reject) => {
+        brandLogo.onload = () => resolve();
+        brandLogo.onerror = () => reject(new Error("logo"));
+        brandLogo.src = "/tahmna-logo.svg";
+      }),
+      new Promise<void>((resolve, reject) => {
+        sweaterLogo.onload = () => resolve();
+        sweaterLogo.onerror = () => reject(new Error("sweater-logo"));
+        sweaterLogo.src = "/sweater-logo-white.svg";
+      }),
+    ]);
     // التقاط الفيديو الظاهر نفسه أكثر موثوقية على Safari من إنشاء فيديو جديد وقت المشاركة.
     let memeFrame = document.querySelector<HTMLVideoElement>("#result-meme-video");
     if (!memeFrame || memeFrame.readyState < HTMLMediaElement.HAVE_CURRENT_DATA || !memeFrame.videoWidth) {
@@ -263,12 +273,13 @@ export default function Home() {
     ctx.fillStyle = "rgba(255,248,234,.66)";
     ctx.font = '700 23px "Lama Sans", Arial';
     ctx.fillText(`إصدار تهمنا  •  ${String(tierPosition).padStart(2, "0")} / ${campaignConfig.tiers.length}`, 730, 163);
+    ctx.drawImage(sweaterLogo, 74, 78, 250, 103);
     ctx.fillStyle = accent;
-    fillRoundRect(80, 82, 190, 58, 29);
+    fillRoundRect(80, 190, 190, 48, 24);
     ctx.fillStyle = "#fff";
     ctx.textAlign = "center";
-    ctx.font = '900 23px "Lama Sans", Arial';
-    ctx.fillText("COLLECTIBLE", 175, 120);
+    ctx.font = '900 20px "Lama Sans", Arial';
+    ctx.fillText("COLLECTIBLE", 175, 222);
 
     // الرياكشن هو الواجهة الأساسية للبطاقة.
     const frameX = 80;
@@ -604,7 +615,11 @@ export default function Home() {
       <footer>
         <div className="footer-inner">
           <div className="footer-brand">
-            <span className="footer-logo"><img src="/tahmna-logo.svg" alt="تهمنا من سويتر" /></span>
+            <span className="footer-logos" aria-label="تهمنا من سويتر">
+              <span className="footer-logo"><img src="/tahmna-logo.svg" alt="شعار تهمنا" /></span>
+              <span className="footer-brand-divider" aria-hidden="true" />
+              <img className="footer-sweater-logo" src="/sweater-logo-white.svg" alt="شعار سويتر" />
+            </span>
             <div><strong>خلّنا قريبين.</strong><small>تابع حسابات سويتر لكل جديد.</small></div>
           </div>
           <nav className="footer-socials" aria-label="حسابات سويتر">

@@ -34,7 +34,11 @@ export default async function SnapResultPage({ searchParams }: { searchParams: S
     <main className="snap-landing" dir="rtl">
       <meta property="snapchat:sticker" content={sticker} />
       <section>
-        <img src="/tahmna-logo.svg" alt="تهمنا" width="170" height="120" />
+        <div className="snap-brand" aria-label="تهمنا من سويتر">
+          <span className="snap-tahmna-logo"><img src="/tahmna-logo.svg" alt="شعار تهمنا" width="170" height="120" /></span>
+          <span className="snap-brand-divider" aria-hidden="true" />
+          <img className="snap-sweater-logo" src="/sweater-logo-white.svg" alt="شعار سويتر" width="518" height="213" />
+        </div>
         <span>بطاقة وقت السيارة</span>
         <h1>{name} يقضي <strong>{days}</strong> يوم داخل السيارة!</h1>
         <p>شخصيته: <b>{tier}</b></p>
