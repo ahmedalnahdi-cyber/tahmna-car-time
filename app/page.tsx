@@ -10,7 +10,6 @@ type Discount = { code: string; value: string; expiresAt: string; terms: string 
 const englishDigits = new Intl.NumberFormat("en-US", { maximumFractionDigits: 1 });
 const formatNumber = (value: number) => englishDigits.format(Math.abs(value - Math.round(value)) < 0.05 ? Math.round(value) : value);
 const getMemeVideo = (tier: ResultTier) => `/memes/${tier.id}.mp4`;
-const gameShareUrl = "https://tahmna-car-time.a7medalnahdi.chatgpt.site/";
 const socialLinks = [
   { label: "إنستقرام", short: "IG", href: "https://www.instagram.com/sweater_sa/" },
   { label: "تيك توك", short: "TT", href: "https://www.tiktok.com/@sweater_sa" },
@@ -21,14 +20,6 @@ const track = (name: string, detail: Record<string, unknown> = {}) => {
   window.dispatchEvent(new CustomEvent("tahmna-analytics", { detail: { name, ...detail } }));
   const dataLayer = (window as typeof window & { dataLayer?: Record<string, unknown>[] }).dataLayer;
   dataLayer?.push({ event: name, ...detail });
-};
-
-const initializeSnapButtons = () => {
-  const snapWindow = window as typeof window & {
-    snap?: { creativekit?: { initalizeShareButtons?: (elements: HTMLCollectionOf<Element>) => void } };
-    snapKitInit?: () => void;
-  };
-  snapWindow.snap?.creativekit?.initalizeShareButtons?.(document.getElementsByClassName("snapchat-share-button"));
 };
 
 const getSessionId = () => {
@@ -100,7 +91,6 @@ export default function Home() {
   const [error, setError] = useState("");
   const [sharing, setSharing] = useState(false);
   const [shareError, setShareError] = useState("");
-  const [shareMenuOpen, setShareMenuOpen] = useState(false);
   const [fallbackOpen, setFallbackOpen] = useState(false);
   const [discount, setDiscount] = useState<Discount | null>(null);
   const [copied, setCopied] = useState(false);
@@ -112,31 +102,6 @@ export default function Home() {
   const displayName = useMemo(() => nameInput.trim().replace(/\s+/g, " "), [nameInput]);
 
   useEffect(() => track("calculator_opened"), []);
-
-  useEffect(() => {
-    const snapWindow = window as typeof window & { snapKitInit?: () => void };
-    snapWindow.snapKitInit = initializeSnapButtons;
-    if (document.getElementById("snapkit-creative-kit-sdk")) {
-      initializeSnapButtons();
-      return;
-    }
-    const script = document.createElement("script");
-    script.id = "snapkit-creative-kit-sdk";
-    script.src = "https://sdk.snapkit.com/js/v1/create.js";
-    script.async = true;
-    document.head.appendChild(script);
-  }, []);
-
-  useEffect(() => {
-    if (!shareMenuOpen) return;
-    const frame = window.requestAnimationFrame(initializeSnapButtons);
-    const onKeyDown = (event: KeyboardEvent) => event.key === "Escape" && setShareMenuOpen(false);
-    window.addEventListener("keydown", onKeyDown);
-    return () => {
-      window.cancelAnimationFrame(frame);
-      window.removeEventListener("keydown", onKeyDown);
-    };
-  }, [shareMenuOpen]);
 
   const markStarted = () => {
     if (!started.current) {
@@ -556,40 +521,20 @@ export default function Home() {
             <span>في السنة</span>
           </div>
 
-          <div className="share-card">
-            <span className="share-sticker">جاهز للستوري ✦</span>
-            <h2>شاركنا نتيجتك وخذ<br />كود خصم خاص.</h2>
-            <p>جهزناها باسمك، شاركها في الستوري وخل أصحابك يحسبون وقتهم.</p>
-            <button className="primary-button" onClick={() => setShareMenuOpen(true)} disabled={sharing}>
-              {sharing ? "جالسين نجهّز بطاقتك…" : "شارك نتيجتي"} <span aria-hidden="true">↗</span>
+          <div className="share-card" style={{ "--share-accent": tier.accent } as React.CSSProperties}>
+            <div className="share-card-topline"><span>بطاقتك صارت جاهزة</span><b>#{String(Number(tier.id.match(/\d+/)?.[0] ?? 1)).padStart(2, "0")}/18</b></div>
+            <div className="share-card-copy">
+              <span className="share-card-mark" aria-hidden="true">✦</span>
+              <div><h2>خلّ بطاقتك تنتشر.</h2><p>صورة ستوري كاملة باسمك ورياكشن شخصيتك.</p></div>
+            </div>
+            <button className="share-hero-button" onClick={share} disabled={sharing} aria-busy={sharing}>
+              <span className="share-button-icon" aria-hidden="true">↗</span>
+              <span className="share-button-copy"><strong>{sharing ? "نصمّم بطاقتك الآن…" : "انشر بطاقتي"}</strong><small>{sharing ? "ثواني وتفتح لك المشاركة" : "صورة 1080 × 1920 جاهزة للستوري"}</small></span>
+              <span className="share-button-arrow" aria-hidden="true">←</span>
             </button>
-            <small className="share-hint">سناب عبر التكامل الرسمي، وباقي التطبيقات عبر مشاركة الصورة.</small>
+            <small className="share-hint">يفتح زر المشاركة في جوالك مباشرة — اختر التطبيق اللي تبيه.</small>
             {shareError && <div className="share-error" role="alert"><span>{shareError}</span><button onClick={share}>إعادة المحاولة</button></div>}
           </div>
-
-          {shareMenuOpen && (
-            <div className="share-menu-backdrop" onMouseDown={(event) => event.target === event.currentTarget && setShareMenuOpen(false)}>
-              <section className="share-menu" role="dialog" aria-modal="true" aria-labelledby="share-menu-title">
-                <button className="share-menu-close" type="button" onClick={() => setShareMenuOpen(false)} aria-label="إغلاق خيارات المشاركة">×</button>
-                <span className="share-menu-kicker">اختر طريقة المشاركة</span>
-                <h3 id="share-menu-title">وين تبي تشاركها؟</h3>
-                <p>سناب يفتح رسميًا لإرسال رابط اللعبة في المحادثة، وباقي التطبيقات تستقبل صورة نتيجتك.</p>
-                <div className="share-menu-options">
-                  <button
-                    type="button"
-                    className="share-option snapchat-share-button"
-                    data-share-url={gameShareUrl}
-                    onClick={() => { track("share_invoked", { platform: "snapchat" }); void revealDiscount(); }}
-                  >
-                    <b aria-hidden="true">SC</b><span><strong>إرسال عبر سناب</strong><small>رسالة أو محادثة عبر Snap Kit</small></span><i aria-hidden="true">↗</i>
-                  </button>
-                  <button type="button" className="share-option" onClick={() => { setShareMenuOpen(false); void share(); }}>
-                    <b aria-hidden="true">＋</b><span><strong>مشاركة الصورة</strong><small>إنستقرام، واتساب وباقي التطبيقات</small></span><i aria-hidden="true">↗</i>
-                  </button>
-                </div>
-              </section>
-            </div>
-          )}
 
           {fallbackOpen && (
             <div className="fallback-box" role="status">
