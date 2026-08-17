@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { campaignConfig } from "../../lib/campaign-config";
 
 type SnapSearchParams = Promise<{ name?: string; days?: string; tier?: string }>;
 
@@ -13,6 +14,8 @@ export async function generateMetadata({ searchParams }: { searchParams: SnapSea
   const tier = clean(params.tier, "شخصية تهمنا");
   const title = `${name} يقضي ${days} يوم داخل السيارة!`;
   const description = `شخصيته: ${tier}. اكتشف بطاقتك أنت في حاسبة تهمنا من سويتر.`;
+  const tierId = campaignConfig.tiers.find((item) => item.name === tier)?.id ?? campaignConfig.tiers[0].id;
+  const sticker = `https://tahmna-car-time.a7medalnahdi.chatgpt.site/snap-stickers/${tierId}.png`;
 
   return {
     title,
@@ -20,6 +23,7 @@ export async function generateMetadata({ searchParams }: { searchParams: SnapSea
     openGraph: { title, description, siteName: "تهمنا من سويتر", locale: "ar_SA", type: "website", images: [] },
     twitter: { card: "summary", title, description, images: [] },
     alternates: { canonical: "/snap" },
+    other: { "snapchat:sticker": sticker },
   };
 }
 
