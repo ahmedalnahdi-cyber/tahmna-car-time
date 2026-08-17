@@ -20,7 +20,7 @@ const tiers = [
 const output = path.resolve("public/snap-stickers");
 await fs.mkdir(output, { recursive: true });
 const font = (await fs.readFile(path.resolve("public/fonts/LamaSans-ExtraBold.woff2"))).toString("base64");
-const logo = await sharp(path.resolve("public/tahmna-logo.svg")).resize({ width: 112, height: 80, fit: "contain" }).png().toBuffer();
+const logo = await sharp(path.resolve("public/tahmna-logo.svg")).resize({ width: 280, height: 200, fit: "contain" }).png().toBuffer();
 
 for (let minutes = 1; minutes <= 240; minutes += 1) {
   const [, , name, accent] = tiers.find(([min, max]) => minutes >= min && minutes <= max);
@@ -28,7 +28,7 @@ for (let minutes = 1; minutes <= 240; minutes += 1) {
   const days = Math.abs(rawDays - Math.round(rawDays)) < 0.05 ? String(Math.round(rawDays)) : rawDays.toFixed(1);
   const nameSize = name.length > 15 ? 26 : 30;
   const svg = `
-  <svg width="400" height="400" xmlns="http://www.w3.org/2000/svg">
+  <svg width="1000" height="1000" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
     <style>@font-face{font-family:Lama;src:url(data:font/woff2;base64,${font})} text{font-family:Lama,Arial,sans-serif}</style>
     <defs><filter id="shadow"><feDropShadow dx="0" dy="8" stdDeviation="5" flood-opacity=".28"/></filter></defs>
     <rect x="14" y="12" width="372" height="372" rx="64" fill="#171512" filter="url(#shadow)"/>
@@ -43,7 +43,7 @@ for (let minutes = 1; minutes <= 240; minutes += 1) {
     <text x="200" y="351" text-anchor="middle" direction="rtl" fill="#171512" font-size="16" font-weight="900">كم تطلع نتيجتك؟  #سيارتك_تهمنا</text>
   </svg>`;
   await sharp(Buffer.from(svg))
-    .composite([{ input: logo, left: 252, top: 88 }])
+    .composite([{ input: logo, left: 630, top: 220 }])
     .png({ compressionLevel: 9, palette: true })
     .toFile(path.join(output, `result-${minutes}.png`));
 }

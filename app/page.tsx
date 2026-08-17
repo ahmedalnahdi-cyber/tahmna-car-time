@@ -572,7 +572,7 @@ export default function Home() {
               onClick={() => { track("share_invoked", { platform: "snapchat_sticker" }); void revealDiscount(); }}
             >
               <span className="snap-ghost" aria-hidden="true">SC</span>
-              <span><strong>ابدأ تحدي سناب</strong><small>رقم أيامك وشخصيتك جاهزة — ورّهم نتيجتك</small></span>
+              <span><strong>شاركها على السناب</strong><small>رقم أيامك وشخصيتك جاهزة — ورّهم نتيجتك</small></span>
               <i aria-hidden="true">↗</i>
             </button>
             <small className="share-hint">يفتح زر المشاركة في جوالك مباشرة — اختر التطبيق اللي تبيه.</small>

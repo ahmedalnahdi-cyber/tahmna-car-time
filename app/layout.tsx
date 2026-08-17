@@ -9,12 +9,12 @@ export async function generateMetadata(): Promise<Metadata> {
   const requestHeaders = await headers();
   const host = requestHeaders.get("x-forwarded-host") ?? requestHeaders.get("host") ?? "localhost:3000";
   const protocol = requestHeaders.get("x-forwarded-proto") ?? (host.startsWith("localhost") ? "http" : "https");
-  const image = `${protocol}://${host}/og.png`;
+  const image = `${protocol}://${host}/og-tahmna.png`;
 
   return {
     title,
     description,
-    openGraph: { title, description, siteName: "تهمنا من سويتر", locale: "ar_SA", type: "website", images: [{ url: image, width: 1200, height: 630, alt: "حاسبة وقتك في السيارة من حملة تهمنا" }] },
+    openGraph: { title, description, siteName: "تهمنا من سويتر", locale: "ar_SA", type: "website", images: [{ url: image, width: 1734, height: 907, alt: "كم يومًا في السنة تقضيه داخل سيارتك؟" }] },
     twitter: { card: "summary_large_image", title, description, images: [image] },
   };
 }
