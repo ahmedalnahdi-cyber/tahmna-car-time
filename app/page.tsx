@@ -465,7 +465,7 @@ export default function Home() {
   return (
     <main className={`experience screen-${screen}`} dir="rtl">
       <div className="noise" aria-hidden="true" />
-      <header><Brand /><span className="micro-tag">تجربة من سويتر</span></header>
+      <header><Brand /></header>
 
       {screen === "input" && (
         <section className="panel input-panel" aria-labelledby="calculator-title">
