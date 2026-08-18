@@ -113,7 +113,7 @@ export default function Home() {
   const tierPosition = useMemo(() => campaignConfig.tiers.findIndex((item) => item.id === tier.id) + 1, [tier.id]);
   const displayName = useMemo(() => nameInput.trim().replace(/\s+/g, " "), [nameInput]);
   const snapShareUrl = useMemo(() => {
-    const params = new URLSearchParams({ name: displayName, days: formatNumber(days), minutes: String(minutes), tier: tier.name, v: "3" });
+    const params = new URLSearchParams({ name: displayName, days: formatNumber(days), minutes: String(minutes), tier: tier.name, v: "4" });
     return `https://tahmna-car-time.a7medalnahdi.chatgpt.site/snap?${params.toString()}`;
   }, [days, displayName, minutes, tier.name]);
 

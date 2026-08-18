@@ -20,8 +20,8 @@ const tiers = [
 const output = path.resolve("public/snap-stickers");
 await fs.mkdir(output, { recursive: true });
 const font = (await fs.readFile(path.resolve("public/fonts/LamaSans-ExtraBold.woff2"))).toString("base64");
-const tahmnaLogo = await sharp(path.resolve("public/tahmna-logo.svg")).resize({ width: 210, height: 150, fit: "contain" }).png().toBuffer();
-const sweaterLogo = await sharp(path.resolve("public/sweater-logo-white.svg")).resize({ width: 260, height: 107, fit: "contain" }).png().toBuffer();
+const tahmnaLogo = await sharp(path.resolve("public/tahmna-logo.svg")).resize({ width: 88, height: 58, fit: "contain" }).png().toBuffer();
+const sweaterLogo = await sharp(path.resolve("public/sweater-logo-white.svg")).resize({ width: 92, height: 38, fit: "contain" }).png().toBuffer();
 const requestedMinute = Number(process.env.STICKER_MINUTE);
 const minutesToRender = Number.isInteger(requestedMinute) && requestedMinute >= 1 && requestedMinute <= 240
   ? [requestedMinute]
@@ -31,33 +31,33 @@ for (const minutes of minutesToRender) {
   const [, , name, accent] = tiers.find(([min, max]) => minutes >= min && minutes <= max);
   const rawDays = (minutes * 365) / 1440;
   const days = Math.abs(rawDays - Math.round(rawDays)) < 0.05 ? String(Math.round(rawDays)) : rawDays.toFixed(1);
-  const nameSize = name.length > 15 ? 54 : 66;
+  const nameSize = name.length > 15 ? 28 : 34;
   const svg = `
-  <svg width="1200" height="720" viewBox="0 0 1200 720" xmlns="http://www.w3.org/2000/svg">
+  <svg width="400" height="400" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
     <style>@font-face{font-family:Lama;src:url(data:font/woff2;base64,${font})} text{font-family:Lama,Arial,sans-serif}</style>
     <defs>
-      <filter id="shadow"><feDropShadow dx="0" dy="14" stdDeviation="10" flood-opacity=".30"/></filter>
-      <clipPath id="inner"><rect x="34" y="30" width="1132" height="650" rx="64"/></clipPath>
+      <filter id="shadow"><feDropShadow dx="0" dy="7" stdDeviation="5" flood-opacity=".34"/></filter>
+      <clipPath id="inner"><rect x="12" y="10" width="376" height="374" rx="54"/></clipPath>
     </defs>
-    <rect x="18" y="14" width="1164" height="684" rx="84" fill="#171512" filter="url(#shadow)"/>
-    <rect x="34" y="30" width="1132" height="650" rx="64" fill="#fff8ea" stroke="#171512" stroke-width="6"/>
+    <rect x="7" y="5" width="386" height="386" rx="61" fill="#171512" filter="url(#shadow)"/>
+    <rect x="12" y="10" width="376" height="374" rx="54" fill="#fff8ea" stroke="#171512" stroke-width="5"/>
     <g clip-path="url(#inner)">
-      <rect x="34" y="30" width="1132" height="138" fill="#ff5a1f"/>
-      <circle cx="1028" cy="408" r="320" fill="${accent}" opacity=".11"/>
-      <path d="M34 568h1132v112H34z" fill="${accent}"/>
+      <rect x="12" y="10" width="376" height="78" fill="#ff5a1f"/>
+      <circle cx="335" cy="216" r="150" fill="${accent}" opacity=".12"/>
+      <circle cx="54" cy="260" r="74" fill="#ff5a1f" opacity=".08"/>
+      <path d="M12 318h376v66H12z" fill="${accent}"/>
     </g>
-    <rect x="920" y="45" width="214" height="108" rx="28" fill="#fff8ea"/>
-    <text x="910" y="245" text-anchor="middle" direction="rtl" fill="#171512" font-size="54" font-weight="900">أنا أقضي</text>
-    <text x="910" y="323" text-anchor="middle" direction="rtl" fill="#171512" font-size="48" font-weight="900">يوم من سنتي</text>
-    <text x="910" y="389" text-anchor="middle" direction="rtl" fill="#171512" font-size="48" font-weight="900">داخل السيارة</text>
-    <text x="420" y="430" text-anchor="middle" fill="#ff5a1f" stroke="#171512" stroke-width="4" paint-order="stroke" font-size="248" font-weight="900">${days}</text>
-    <text x="420" y="505" text-anchor="middle" direction="rtl" fill="#171512" font-size="43" font-weight="900">يومًا في السنة</text>
-    <text x="600" y="640" text-anchor="middle" direction="rtl" fill="#fff" font-size="${nameSize}" font-weight="900">${name}</text>
+    <rect x="22" y="20" width="102" height="58" rx="18" fill="#fff8ea"/>
+    <rect x="278" y="25" width="100" height="48" rx="16" fill="#171512"/>
+    <text x="200" y="124" text-anchor="middle" direction="rtl" fill="#171512" font-size="24" font-weight="900">وقتي داخل السيارة</text>
+    <text x="200" y="244" text-anchor="middle" fill="#ff5a1f" stroke="#171512" stroke-width="3" paint-order="stroke" font-size="118" font-weight="900">${days}</text>
+    <text x="200" y="285" text-anchor="middle" direction="rtl" fill="#171512" font-size="27" font-weight="900">يوم في السنة</text>
+    <text x="200" y="363" text-anchor="middle" direction="rtl" fill="#fff" font-size="${nameSize}" font-weight="900">${name}</text>
   </svg>`;
   await sharp(Buffer.from(svg))
     .composite([
-      { input: sweaterLogo, left: 70, top: 46 },
-      { input: tahmnaLogo, left: 922, top: 24 },
+      { input: tahmnaLogo, left: 29, top: 20 },
+      { input: sweaterLogo, left: 282, top: 30 },
     ])
     .png({ compressionLevel: 9, palette: true })
     .toFile(path.join(output, `result-${minutes}.png`));

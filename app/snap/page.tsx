@@ -28,7 +28,7 @@ export default async function SnapResultPage({ searchParams }: { searchParams: S
   const days = clean(params.days, "؟", 8);
   const tier = clean(params.tier, "شخصية تهمنا");
   const minutes = Math.min(240, Math.max(1, Math.round(Number(params.minutes) || 1)));
-  const sticker = `https://tahmna-car-time.a7medalnahdi.chatgpt.site/snap-stickers/result-${minutes}.png`;
+  const sticker = `https://tahmna-car-time.a7medalnahdi.chatgpt.site/snap-stickers/result-${minutes}.png?v=4`;
 
   return (
     <main className="snap-landing" dir="rtl">
