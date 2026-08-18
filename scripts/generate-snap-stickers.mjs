@@ -20,7 +20,7 @@ const tiers = [
 const output = path.resolve("public/snap-stickers");
 await fs.mkdir(output, { recursive: true });
 const font = (await fs.readFile(path.resolve("public/fonts/LamaSans-ExtraBold.woff2"))).toString("base64");
-const tahmnaLogo = await sharp(path.resolve("public/tahmna-logo.svg")).resize({ width: 88, height: 58, fit: "contain" }).png().toBuffer();
+const tahmnaLogo = await sharp(path.resolve("public/tahmna-logo.svg")).resize({ width: 92, height: 58, fit: "contain" }).png().toBuffer();
 const sweaterLogo = await sharp(path.resolve("public/sweater-logo-white.svg")).resize({ width: 92, height: 38, fit: "contain" }).png().toBuffer();
 const requestedMinute = Number(process.env.STICKER_MINUTE);
 const minutesToRender = Number.isInteger(requestedMinute) && requestedMinute >= 1 && requestedMinute <= 240
@@ -47,7 +47,6 @@ for (const minutes of minutesToRender) {
       <circle cx="54" cy="260" r="74" fill="#ff5a1f" opacity=".08"/>
       <path d="M12 318h376v66H12z" fill="${accent}"/>
     </g>
-    <rect x="22" y="20" width="102" height="58" rx="18" fill="#fff8ea"/>
     <rect x="278" y="25" width="100" height="48" rx="16" fill="#171512"/>
     <text x="200" y="124" text-anchor="middle" direction="rtl" fill="#171512" font-size="24" font-weight="900">وقتي داخل السيارة</text>
     <text x="200" y="244" text-anchor="middle" fill="#ff5a1f" stroke="#171512" stroke-width="3" paint-order="stroke" font-size="118" font-weight="900">${days}</text>
@@ -56,7 +55,7 @@ for (const minutes of minutesToRender) {
   </svg>`;
   await sharp(Buffer.from(svg))
     .composite([
-      { input: tahmnaLogo, left: 29, top: 20 },
+      { input: tahmnaLogo, left: 27, top: 20 },
       { input: sweaterLogo, left: 282, top: 30 },
     ])
     .png({ compressionLevel: 9, palette: true })
