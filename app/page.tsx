@@ -6,7 +6,7 @@ import { FaInstagram, FaSnapchat, FaTiktok, FaWhatsapp, FaXTwitter } from "react
 import { campaignConfig, getTier, type ResultTier } from "../lib/campaign-config";
 
 type Screen = "input" | "calculating" | "result";
-type Discount = { code: string; value: string; expiresAt: string; terms: string };
+type Discount = { code: string; value: string; expiresAt: string };
 
 const englishDigits = new Intl.NumberFormat("en-US", { maximumFractionDigits: 1 });
 const formatNumber = (value: number) => englishDigits.format(Math.abs(value - Math.round(value)) < 0.05 ? Math.round(value) : value);
@@ -611,7 +611,7 @@ export default function Home() {
               <p>كفو {displayName}! هذا كودك الخاص من سويتر.</p>
               <button className="code" onClick={copyCode} aria-label="نسخ كود الخصم"><span>{discount.code}</span><small>{copied ? "تم النسخ ✓" : "نسخ الكود"}</small></button>
               <a className="primary-button" href={campaignConfig.bookingUrl} target="_blank" rel="noreferrer" onClick={() => track("booking_clicked")}>استخدم الخصم واحجز الآن <span aria-hidden="true">←</span></a>
-              <ul><li>{discount.value}</li><li>ينتهي في {discount.expiresAt}</li><li>{discount.terms}</li><li>يستخدم مرة واحدة فقط</li></ul>
+              <ul><li>{discount.value}</li><li>صالح حتى تاريخ {discount.expiresAt}</li><li>يستخدم مرة واحدة فقط</li></ul>
             </div>
           )}
 

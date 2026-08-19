@@ -160,8 +160,8 @@ h1, h2, p { margin-top: 0; }
 .discount-card { position: relative; margin-top: 24px; padding: 28px 18px 20px; color: white; background: var(--accent); border: 2px solid var(--ink); border-radius: var(--radius-lg); box-shadow: var(--shadow); animation: reveal .5s cubic-bezier(.2,1.4,.4,1); }
 .confetti { position: absolute; top: 8px; left: 0; right: 0; color: var(--orange); letter-spacing: 18px; animation: blink 1s steps(2) infinite; }
 .discount-card > p { margin: 12px 0 14px; font-weight: 900; }
-.code { width: 100%; margin-bottom: 14px; padding: 16px; display: flex; align-items: center; justify-content: space-between; background: var(--white); border: 2px dashed var(--ink); border-radius: 15px; direction: ltr; cursor: pointer; }
-.code span { font: 900 23px Arial; letter-spacing: 1px; }
+.code { width: 100%; margin-bottom: 14px; padding: 16px; display: flex; align-items: center; justify-content: space-between; color: var(--ink); background: var(--white); border: 2px dashed var(--ink); border-radius: 15px; direction: ltr; cursor: pointer; }
+.code span { font-family: "Lama Sans", Tahoma, Arial, sans-serif; font-size: 25px; font-weight: 900; letter-spacing: 0; }
 .code small { font-family: "Lama Sans", Tahoma, Arial, sans-serif; font-weight: 900; }
 .discount-card ul { margin: 18px 0 0; padding: 0 20px 0 0; text-align: right; color: #eef7ff; font-size: 11px; line-height: 1.8; }
 .secondary-button { margin: 30px 0 0; padding: 14px 20px; color: var(--ink); background: transparent; border: 0; border-bottom: 2px solid var(--ink); font-weight: 900; cursor: pointer; }

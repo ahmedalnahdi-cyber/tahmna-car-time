@@ -29,12 +29,11 @@ export const campaignConfig = {
     defaultValue: 67,
   },
   shareUrl: "https://sweater.sa/tahmna",
-  bookingUrl: "https://sweater.sa/",
+  bookingUrl: "https://sweater.go.link/?adj_t=239i9e5n",
   fallbackDiscount: {
-    code: "TAHMNA-DEMO",
-    value: "خصم 20٪",
-    expiresAt: "31 ديسمبر 2026",
-    terms: "على أول حجز عبر سويتر، بحد أقصى 30 ر.س.",
+    code: "تهمنا",
+    value: "خصم 30%",
+    expiresAt: "31 Aug 2026",
   },
   tiers: [
     {
