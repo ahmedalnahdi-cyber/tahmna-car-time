@@ -25,8 +25,13 @@ const socialLinks = [
 ];
 const track = (name: string, detail: Record<string, unknown> = {}) => {
   window.dispatchEvent(new CustomEvent("tahmna-analytics", { detail: { name, ...detail } }));
-  const dataLayer = (window as typeof window & { dataLayer?: Record<string, unknown>[] }).dataLayer;
-  dataLayer?.push({ event: name, ...detail });
+  const analyticsWindow = window as typeof window & {
+    gtag?: (command: "event", eventName: string, parameters?: Record<string, unknown>) => void;
+    dataLayer?: unknown[];
+  };
+  analyticsWindow.dataLayer ??= [];
+  analyticsWindow.gtag ??= (...args) => analyticsWindow.dataLayer?.push(args);
+  analyticsWindow.gtag?.("event", name, detail);
 };
 
 const initializeSnapButtons = () => {
