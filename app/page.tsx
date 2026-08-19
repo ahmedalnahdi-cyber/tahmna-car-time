@@ -29,14 +29,6 @@ const track = (name: string, detail: Record<string, unknown> = {}) => {
   dataLayer?.push({ event: name, ...detail });
 };
 
-const initializeSnapButtons = () => {
-  const snapWindow = window as typeof window & {
-    snap?: { creativekit?: { initalizeShareButtons?: (elements: HTMLCollectionOf<Element>) => void } };
-    snapKitInit?: () => void;
-  };
-  snapWindow.snap?.creativekit?.initalizeShareButtons?.(document.getElementsByClassName("snapchat-share-button"));
-};
-
 const getSessionId = () => {
   const key = "tahmna_anonymous_session";
   const existing = sessionStorage.getItem(key);
@@ -111,40 +103,13 @@ export default function Home() {
   const [fallbackOpen, setFallbackOpen] = useState(false);
   const [discount, setDiscount] = useState<Discount | null>(null);
   const [copied, setCopied] = useState(false);
-  const [siteOrigin, setSiteOrigin] = useState("");
   const started = useRef(false);
 
   const days = useMemo(() => (minutes * 365) / 1440, [minutes]);
   const hours = useMemo(() => Math.round((minutes * 365) / 60), [minutes]);
   const tier = useMemo(() => getTier(minutes), [minutes]);
   const displayName = useMemo(() => nameInput.trim().replace(/\s+/g, " "), [nameInput]);
-  const snapShareUrl = useMemo(() => {
-    const params = new URLSearchParams({ name: displayName, days: formatNumber(days), unit: getDayUnit(days), minutes: String(minutes), tier: tier.name, v: "6" });
-    return `${siteOrigin}/snap?${params.toString()}`;
-  }, [days, displayName, minutes, siteOrigin, tier.name]);
-
   useEffect(() => track("calculator_opened"), []);
-  useEffect(() => setSiteOrigin(window.location.origin), []);
-
-  useEffect(() => {
-    const snapWindow = window as typeof window & { snapKitInit?: () => void };
-    snapWindow.snapKitInit = initializeSnapButtons;
-    if (document.getElementById("snapkit-creative-kit-sdk")) {
-      initializeSnapButtons();
-      return;
-    }
-    const script = document.createElement("script");
-    script.id = "snapkit-creative-kit-sdk";
-    script.src = "https://sdk.snapkit.com/js/v1/create.js";
-    script.async = true;
-    document.head.appendChild(script);
-  }, []);
-
-  useEffect(() => {
-    if (screen !== "result") return;
-    const frame = window.requestAnimationFrame(initializeSnapButtons);
-    return () => window.cancelAnimationFrame(frame);
-  }, [screen, snapShareUrl]);
 
   const markStarted = () => {
     if (!started.current) {
@@ -387,7 +352,7 @@ export default function Home() {
     track("discount_revealed");
   };
 
-  const share = async (platform: "instagram" | "whatsapp" | "general" = "general") => {
+  const share = async (platform: "snapchat" | "instagram" | "whatsapp" | "general" = "general") => {
     setSharing(true);
     setShareError("");
     track("share_clicked", { platform });
@@ -567,7 +532,7 @@ export default function Home() {
               <div><h2>شارك واربح!</h2><p>شارك نتيجتك مع أصدقائك واستمتع بخصم 30%!</p></div>
             </div>
             <div className="share-platform-grid">
-              <button type="button" className="share-platform share-platform-snap snapchat-share-button" data-share-url={snapShareUrl} onClick={() => { track("share_invoked", { platform: "snapchat_sticker" }); void revealDiscount(); }}>
+              <button type="button" className="share-platform share-platform-snap" onClick={() => void share("snapchat")} disabled={sharing} aria-busy={sharing}>
                 <FaSnapchat aria-hidden="true" /><span>سناب</span>
               </button>
               <button type="button" className="share-platform share-platform-instagram" onClick={() => void share("instagram")} disabled={sharing} aria-busy={sharing}>
