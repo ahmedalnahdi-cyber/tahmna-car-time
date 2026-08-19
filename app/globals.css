@@ -90,27 +90,27 @@ h1, h2, p { margin-top: 0; }
 .calendar-flip { position: absolute; left: 24px; bottom: 24px; width: 86px; padding: 12px; display: flex; flex-direction: column; background: var(--white); border: 2px solid var(--ink); border-radius: 14px; box-shadow: 4px 4px 0 var(--ink); transform: rotate(-8deg); animation: calendar .35s steps(2) infinite; }
 .calendar-flip span { font-size: 24px; font-weight: 900; }
 
-.result-panel { padding-top: 38px; }
-.result-card { position: relative; overflow: hidden; padding: 18px; color: var(--cream); background: var(--ink); border: 2px solid var(--ink); border-radius: 30px; box-shadow: 9px 9px 0 var(--tier-accent); text-align: right; }
+.result-panel { padding-top: 24px; }
+.result-card { position: relative; overflow: hidden; padding: 14px; color: var(--cream); background: var(--ink); border: 2px solid var(--ink); border-radius: 27px; box-shadow: 7px 7px 0 var(--tier-accent); text-align: right; }
 .result-card::before { content: ""; position: absolute; width: 260px; height: 260px; top: -155px; left: -120px; background: var(--tier-accent); border-radius: 50%; opacity: .42; }
 .result-card-topline { position: relative; display: flex; align-items: center; justify-content: space-between; gap: 12px; color: rgba(255,248,234,.68); font-size: 11px; font-weight: 900; }
 .result-card-topline span { display: flex; align-items: center; gap: 7px; }
 .result-card-topline i { width: 8px; height: 8px; background: var(--tier-accent); border-radius: 50%; }
 .result-card-topline b { padding: 5px 9px; border: 1px solid rgba(255,248,234,.28); border-radius: 999px; font: 900 11px Arial, sans-serif; letter-spacing: .4px; }
-.result-card-score { position: relative; margin: 28px 3px 20px; padding: 0 0 24px; color: var(--cream); border-bottom: 1px solid rgba(255,248,234,.18); text-align: center; }
+.result-card-score { position: relative; margin: 17px 3px 13px; padding: 0 0 15px; color: var(--cream); border-bottom: 1px solid rgba(255,248,234,.18); text-align: center; }
 .result-card-score::after { content: ""; position: absolute; width: 70px; height: 4px; right: 0; bottom: -2px; background: var(--tier-accent); border-radius: 999px; }
-.result-card-score > span { display: block; color: rgba(255,248,234,.68); font-size: 14px; font-weight: 900; }
-.result-card-days { min-height: 148px; display: flex; align-items: flex-end; justify-content: center; gap: 13px; direction: rtl; }
-.result-card-days strong { color: var(--orange); font-size: clamp(118px, 36vw, 180px); line-height: .88; letter-spacing: -8px; font-weight: 900; text-shadow: 4px 5px 0 rgba(0,0,0,.45); -webkit-text-stroke: 1.5px var(--cream); }
-.result-card-days em { margin-bottom: 12px; padding: 7px 12px 6px; color: var(--ink); background: var(--tier-accent); border-radius: 999px; font-size: 19px; line-height: 1; font-style: normal; font-weight: 900; transform: rotate(-3deg); }
-.result-card-persona { position: relative; margin: 0 3px 18px; }
+.result-card-score > span { display: block; color: rgba(255,248,234,.68); font-size: 12px; font-weight: 900; }
+.result-card-days { min-height: 104px; display: flex; align-items: flex-end; justify-content: center; gap: 10px; direction: rtl; }
+.result-card-days strong { color: var(--orange); font-size: clamp(86px, 29vw, 136px); line-height: .88; letter-spacing: -6px; font-weight: 900; text-shadow: 3px 4px 0 rgba(0,0,0,.45); -webkit-text-stroke: 1.2px var(--cream); }
+.result-card-days em { margin-bottom: 8px; padding: 6px 10px 5px; color: var(--ink); background: var(--tier-accent); border-radius: 999px; font-size: 16px; line-height: 1; font-style: normal; font-weight: 900; transform: rotate(-3deg); }
+.result-card-persona { position: relative; margin: 0 3px 12px; }
 .result-card-persona small { display: block; color: var(--tier-accent); font-size: 12px; font-weight: 900; }
-.result-card-persona h1 { margin: 2px 0 6px; color: var(--cream); font-size: clamp(31px, 9vw, 45px); line-height: 1.15; }
-.result-card-persona p { margin: 0; color: rgba(255,248,234,.78); font-size: 16px; line-height: 1.6; font-weight: 800; }
-.meme-media { position: relative; min-height: 315px; overflow: hidden; color: white; background: var(--ink); border: 2px solid var(--tier-accent); border-radius: 22px; }
-.meme-video { width: 100%; height: 315px; display: block; object-fit: cover; background: var(--ink); }
+.result-card-persona h1 { margin: 1px 0 3px; color: var(--cream); font-size: clamp(27px, 8vw, 39px); line-height: 1.1; }
+.result-card-persona p { margin: 0; color: rgba(255,248,234,.78); font-size: 14px; line-height: 1.45; font-weight: 800; }
+.meme-media { position: relative; min-height: 220px; overflow: hidden; color: white; background: var(--ink); border: 2px solid var(--tier-accent); border-radius: 18px; }
+.meme-video { width: 100%; height: 220px; display: block; object-fit: cover; background: var(--ink); }
 .sound-button { position: absolute; inset: 0; margin: auto; width: max-content; height: 50px; padding: 0 16px; color: white; background: var(--orange); border: 2px solid var(--ink); border-radius: 14px; box-shadow: 0 4px 0 var(--ink); font-weight: 900; cursor: pointer; }
-.result-card-stat { margin-top: 14px; padding: 13px 14px; display: flex; align-items: baseline; justify-content: center; gap: 7px; color: var(--ink); background: var(--tier-accent); border-radius: 15px; }
+.result-card-stat { margin-top: 9px; padding: 9px 12px; display: flex; align-items: baseline; justify-content: center; gap: 7px; color: var(--ink); background: var(--tier-accent); border-radius: 13px; }
 .result-card-stat span { font-size: 11px; font-weight: 800; }
 .result-card-stat strong { font-size: 22px; }
 .result-card + .share-card { margin-top: 28px; }
@@ -204,7 +204,16 @@ footer { padding: 42px 20px; color: var(--cream); background: var(--ink); }
   header { padding-inline: 28px; }
   .panel { padding-top: 68px; }
   .calculator-card { padding: 30px; }
-  .result-card { padding: 26px; }
+  .result-panel { padding-top: 38px; }
+  .result-card { padding: 26px; border-radius: 30px; box-shadow: 9px 9px 0 var(--tier-accent); }
+  .result-card-score { margin: 28px 3px 20px; padding-bottom: 24px; }
+  .result-card-score > span { font-size: 14px; }
+  .result-card-days { min-height: 148px; gap: 13px; }
+  .result-card-days strong { font-size: clamp(118px, 18vw, 180px); letter-spacing: -8px; }
+  .result-card-days em { margin-bottom: 12px; padding: 7px 12px 6px; font-size: 19px; }
+  .result-card-persona { margin-bottom: 18px; }
+  .result-card-persona h1 { margin-bottom: 6px; font-size: 45px; }
+  .result-card-persona p { font-size: 16px; line-height: 1.6; }
   .meme-media, .meme-video { min-height: 390px; height: 390px; }
   .share-card { padding: 44px 34px 30px; }
 }
