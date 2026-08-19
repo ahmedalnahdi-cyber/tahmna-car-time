@@ -548,21 +548,22 @@ export default function Home() {
 
       {screen === "result" && (
         <section className="panel result-panel" aria-labelledby="result-title">
-          <div className="eyebrow"><i /> نتيجتك</div>
-          <h1 id="result-title">{displayName}… وش ذا كله!</h1>
-            <div className="result-number"><strong>{formatNumber(days)}</strong><span>يوم</span></div>
-            <p className="result-context">تقضيه من سنتك داخل السيارة</p>
-
-          <div className="tier-card" style={{ "--tier-accent": tier.accent } as React.CSSProperties}>
-            <div className="tier-heading"><span>شخصية {displayName}</span><h2>{tier.name}</h2></div>
+          <div className="result-card" style={{ "--tier-accent": tier.accent } as React.CSSProperties}>
+            <div className="result-card-topline">
+              <span><i /> نتيجة {displayName}</span>
+              <b>#{String(tierPosition).padStart(2, "0")}/{campaignConfig.tiers.length}</b>
+            </div>
+            <div className="result-card-score">
+              <span>تقضي من سنتك داخل السيارة</span>
+              <div className="result-card-days"><strong>{formatNumber(days)}</strong><em>يوم</em></div>
+            </div>
+            <div className="result-card-persona">
+              <small>شخصيتك</small>
+              <h1 id="result-title">{tier.name}</h1>
+              <p>«{tier.message}»</p>
+            </div>
             <MemeMedia tier={tier} />
-            <blockquote>«{displayName}، {tier.message}»</blockquote>
-          </div>
-
-          <div className="stat-strip">
-            <span>يعني تقريبًا</span>
-            <strong>{englishDigits.format(hours)} ساعة</strong>
-            <span>في السنة</span>
+            <div className="result-card-stat"><span>يعني تقريبًا</span><strong>{englishDigits.format(hours)} ساعة</strong><span>في السنة</span></div>
           </div>
 
           <div className="share-card" style={{ "--share-accent": tier.accent } as React.CSSProperties}>

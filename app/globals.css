@@ -91,22 +91,28 @@ h1, h2, p { margin-top: 0; }
 .calendar-flip span { font-size: 24px; font-weight: 900; }
 
 .result-panel { padding-top: 38px; }
-.result-panel > h1 { margin-bottom: 4px; font-size: clamp(30px, 8vw, 48px); font-weight: 900; }
-.result-number { display: flex; align-items: baseline; justify-content: center; gap: 10px; direction: rtl; }
-.result-number strong { color: var(--orange); font-size: clamp(112px, 36vw, 190px); line-height: 1; letter-spacing: -10px; font-weight: 900; text-shadow: 5px 5px 0 var(--ink); -webkit-text-stroke: 3px var(--ink); }
-.result-number span { font-size: 25px; font-weight: 900; }
-.result-context { margin: 4px 0 30px; font-size: 18px; font-weight: 700; }
-.tier-card { padding: 18px; background: var(--ink); border-radius: var(--radius-lg); box-shadow: 8px 8px 0 var(--tier-accent); color: var(--cream); }
-.tier-heading { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; margin: 2px 3px 16px; text-align: right; }
-.tier-heading span { color: var(--tier-accent); font-size: 12px; font-weight: 900; }
-.tier-heading h2 { margin: 0; font-size: 25px; }
+.result-card { position: relative; overflow: hidden; padding: 18px; color: var(--cream); background: var(--ink); border: 2px solid var(--ink); border-radius: 30px; box-shadow: 9px 9px 0 var(--tier-accent); text-align: right; }
+.result-card::before { content: ""; position: absolute; width: 260px; height: 260px; top: -155px; left: -120px; background: var(--tier-accent); border-radius: 50%; opacity: .42; }
+.result-card-topline { position: relative; display: flex; align-items: center; justify-content: space-between; gap: 12px; color: rgba(255,248,234,.68); font-size: 11px; font-weight: 900; }
+.result-card-topline span { display: flex; align-items: center; gap: 7px; }
+.result-card-topline i { width: 8px; height: 8px; background: var(--tier-accent); border-radius: 50%; }
+.result-card-topline b { padding: 5px 9px; border: 1px solid rgba(255,248,234,.28); border-radius: 999px; font: 900 11px Arial, sans-serif; letter-spacing: .4px; }
+.result-card-score { position: relative; margin: 22px 0 18px; padding: 18px 14px 12px; color: var(--ink); background: var(--cream); border-radius: 23px; text-align: center; }
+.result-card-score > span { display: block; font-size: 14px; font-weight: 900; }
+.result-card-days { min-height: 142px; display: flex; align-items: flex-end; justify-content: center; gap: 10px; direction: rtl; }
+.result-card-days strong { color: var(--orange); font-size: clamp(112px, 34vw, 172px); line-height: .88; letter-spacing: -8px; font-weight: 900; text-shadow: 4px 4px 0 var(--ink); -webkit-text-stroke: 2px var(--ink); }
+.result-card-days em { padding-bottom: 13px; font-size: 27px; font-style: normal; font-weight: 900; }
+.result-card-persona { position: relative; margin: 0 3px 18px; }
+.result-card-persona small { display: block; color: var(--tier-accent); font-size: 12px; font-weight: 900; }
+.result-card-persona h1 { margin: 2px 0 6px; color: var(--cream); font-size: clamp(31px, 9vw, 45px); line-height: 1.15; }
+.result-card-persona p { margin: 0; color: rgba(255,248,234,.78); font-size: 16px; line-height: 1.6; font-weight: 800; }
 .meme-media { position: relative; min-height: 315px; overflow: hidden; color: white; background: var(--ink); border: 2px solid var(--tier-accent); border-radius: 22px; }
 .meme-video { width: 100%; height: 315px; display: block; object-fit: cover; background: var(--ink); }
 .sound-button { position: absolute; inset: 0; margin: auto; width: max-content; height: 50px; padding: 0 16px; color: white; background: var(--orange); border: 2px solid var(--ink); border-radius: 14px; box-shadow: 0 4px 0 var(--ink); font-weight: 900; cursor: pointer; }
-.tier-card blockquote { margin: 20px 4px 8px; font-size: 20px; line-height: 1.6; font-weight: 900; }
-.stat-strip { margin: 24px 0; padding: 18px; display: flex; align-items: baseline; justify-content: center; gap: 7px; background: var(--accent); border: 2px solid var(--ink); border-radius: 18px; transform: rotate(.7deg); }
-.stat-strip span { font-size: 12px; font-weight: 700; }
-.stat-strip strong { font-size: 23px; }
+.result-card-stat { margin-top: 14px; padding: 13px 14px; display: flex; align-items: baseline; justify-content: center; gap: 7px; color: var(--ink); background: var(--tier-accent); border-radius: 15px; }
+.result-card-stat span { font-size: 11px; font-weight: 800; }
+.result-card-stat strong { font-size: 22px; }
+.result-card + .share-card { margin-top: 28px; }
 .share-card { position: relative; overflow: hidden; padding: 18px; color: var(--cream); background: var(--ink); border: 2px solid var(--ink); border-radius: 28px; box-shadow: 7px 7px 0 var(--share-accent); text-align: right; }
 .share-card::before { content: ""; position: absolute; width: 210px; height: 210px; top: -125px; left: -70px; background: var(--share-accent); border-radius: 50%; filter: blur(4px); opacity: .52; }
 .share-card-topline { position: relative; margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between; color: rgba(255,248,234,.68); font-size: 11px; font-weight: 800; }
@@ -197,7 +203,7 @@ footer { padding: 42px 20px; color: var(--cream); background: var(--ink); }
   header { padding-inline: 28px; }
   .panel { padding-top: 68px; }
   .calculator-card { padding: 30px; }
-  .tier-card { padding: 24px; }
+  .result-card { padding: 26px; }
   .meme-media, .meme-video { min-height: 390px; height: 390px; }
   .share-card { padding: 44px 34px 30px; }
 }
