@@ -592,7 +592,6 @@ export default function Home() {
                 <b aria-hidden="true">↓</b><span>حفظ</span>
               </button>
             </div>
-            <small className="share-hint">إنستقرام وواتساب يفتحان مشاركة الصورة مباشرة من جوالك.</small>
             {shareError && <div className="share-error" role="alert"><span>{shareError}</span><button onClick={() => void share()}>إعادة المحاولة</button></div>}
           </div>
 
