@@ -13,7 +13,7 @@ const formatNumber = (value: number) => englishDigits.format(Math.abs(value - Ma
 const getDayUnit = (value: number) => {
   const displayedValue = Math.abs(value - Math.round(value)) < 0.05 ? Math.round(value) : Number(value.toFixed(1));
   if (displayedValue === 2) return "يومين";
-  if (Number.isInteger(displayedValue) && displayedValue >= 3 && displayedValue <= 10) return "أيام";
+  if (displayedValue >= 3 && displayedValue <= 10) return "أيام";
   return "يوم";
 };
 const getMemeVideo = (tier: ResultTier) => `/memes/${tier.id}.mp4`;

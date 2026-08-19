@@ -32,7 +32,7 @@ for (const minutes of minutesToRender) {
   const rawDays = (minutes * 365) / 1440;
   const days = Math.abs(rawDays - Math.round(rawDays)) < 0.05 ? String(Math.round(rawDays)) : rawDays.toFixed(1);
   const numericDays = Number(days);
-  const dayUnit = numericDays === 2 ? "يومين" : Number.isInteger(numericDays) && numericDays >= 3 && numericDays <= 10 ? "أيام" : "يوم";
+  const dayUnit = numericDays === 2 ? "يومين" : numericDays >= 3 && numericDays <= 10 ? "أيام" : "يوم";
   const nameSize = name.length > 15 ? 28 : 34;
   const svg = `
   <svg width="400" height="400" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
