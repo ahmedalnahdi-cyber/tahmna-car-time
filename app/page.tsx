@@ -111,6 +111,7 @@ export default function Home() {
   const [fallbackOpen, setFallbackOpen] = useState(false);
   const [discount, setDiscount] = useState<Discount | null>(null);
   const [copied, setCopied] = useState(false);
+  const [siteOrigin, setSiteOrigin] = useState("");
   const started = useRef(false);
 
   const days = useMemo(() => (minutes * 365) / 1440, [minutes]);
@@ -120,10 +121,11 @@ export default function Home() {
   const displayName = useMemo(() => nameInput.trim().replace(/\s+/g, " "), [nameInput]);
   const snapShareUrl = useMemo(() => {
     const params = new URLSearchParams({ name: displayName, days: formatNumber(days), unit: getDayUnit(days), minutes: String(minutes), tier: tier.name, v: "6" });
-    return `https://tahmna-car-time.a7medalnahdi.chatgpt.site/snap?${params.toString()}`;
-  }, [days, displayName, minutes, tier.name]);
+    return `${siteOrigin}/snap?${params.toString()}`;
+  }, [days, displayName, minutes, siteOrigin, tier.name]);
 
   useEffect(() => track("calculator_opened"), []);
+  useEffect(() => setSiteOrigin(window.location.origin), []);
 
   useEffect(() => {
     const snapWindow = window as typeof window & { snapKitInit?: () => void };

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { headers } from "next/headers";
 import Link from "next/link";
 
 type SnapSearchParams = Promise<{ name?: string; days?: string; unit?: string; minutes?: string; tier?: string }>;
@@ -25,12 +26,15 @@ export async function generateMetadata({ searchParams }: { searchParams: SnapSea
 
 export default async function SnapResultPage({ searchParams }: { searchParams: SnapSearchParams }) {
   const params = await searchParams;
+  const requestHeaders = await headers();
   const name = clean(params.name, "صاحب البطاقة", 28);
   const days = clean(params.days, "؟", 8);
   const unit = clean(params.unit, "يوم", 8);
   const tier = clean(params.tier, "شخصية تهمنا");
   const minutes = Math.min(240, Math.max(1, Math.round(Number(params.minutes) || 1)));
-  const sticker = `https://tahmna-car-time.a7medalnahdi.chatgpt.site/snap-stickers/result-${minutes}.png?v=6`;
+  const host = requestHeaders.get("x-forwarded-host") ?? requestHeaders.get("host") ?? "tahmna-car-time.a7medalnahdi.chatgpt.site";
+  const protocol = requestHeaders.get("x-forwarded-proto") ?? (host.includes("localhost") ? "http" : "https");
+  const sticker = `${protocol}://${host}/snap-stickers/result-${minutes}.png?v=6`;
 
   return (
     <main className="snap-landing" dir="rtl">
