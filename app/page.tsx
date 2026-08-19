@@ -576,7 +576,7 @@ export default function Home() {
             <div className="share-card-topline"><span>بطاقتك صارت جاهزة</span></div>
             <div className="share-card-copy">
               <span className="share-card-mark" aria-hidden="true">✦</span>
-              <div><h2>شارك بطاقتك.</h2><p>اختر المنصة أو احفظ الصورة عندك.</p></div>
+              <div><h2>شارك واربح!</h2><p>شارك نتيجتك مع أصدقائك واستمتع بخصم 30%!</p></div>
             </div>
             <div className="share-platform-grid">
               <button type="button" className="share-platform share-platform-snap snapchat-share-button" data-share-url={snapShareUrl} onClick={() => { track("share_invoked", { platform: "snapchat_sticker" }); void revealDiscount(); }}>
