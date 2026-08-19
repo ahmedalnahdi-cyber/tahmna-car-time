@@ -117,7 +117,6 @@ export default function Home() {
   const days = useMemo(() => (minutes * 365) / 1440, [minutes]);
   const hours = useMemo(() => Math.round((minutes * 365) / 60), [minutes]);
   const tier = useMemo(() => getTier(minutes), [minutes]);
-  const tierPosition = useMemo(() => campaignConfig.tiers.findIndex((item) => item.id === tier.id) + 1, [tier.id]);
   const displayName = useMemo(() => nameInput.trim().replace(/\s+/g, " "), [nameInput]);
   const snapShareUrl = useMemo(() => {
     const params = new URLSearchParams({ name: displayName, days: formatNumber(days), unit: getDayUnit(days), minutes: String(minutes), tier: tier.name, v: "6" });
@@ -280,7 +279,7 @@ export default function Home() {
     ctx.fillText("بطاقة وقت السيارة", 730, 120);
     ctx.fillStyle = "rgba(255,248,234,.66)";
     ctx.font = '700 23px "Lama Sans", Arial';
-    ctx.fillText(`إصدار تهمنا  •  ${String(tierPosition).padStart(2, "0")} / ${campaignConfig.tiers.length}`, 730, 163);
+    ctx.fillText("إصدار تهمنا", 730, 163);
     ctx.drawImage(sweaterLogo, 74, 78, 250, 103);
     ctx.fillStyle = accent;
     fillRoundRect(80, 190, 190, 48, 24);
@@ -559,7 +558,6 @@ export default function Home() {
           <div className="result-card" style={{ "--tier-accent": tier.accent } as React.CSSProperties}>
             <div className="result-card-topline">
               <span><i /> نتيجة {displayName}</span>
-              <b>#{String(tierPosition).padStart(2, "0")}/{campaignConfig.tiers.length}</b>
             </div>
             <div className="result-card-score">
               <span>تقضي من سنتك داخل السيارة</span>
@@ -575,7 +573,7 @@ export default function Home() {
           </div>
 
           <div className="share-card" style={{ "--share-accent": tier.accent } as React.CSSProperties}>
-            <div className="share-card-topline"><span>بطاقتك صارت جاهزة</span><b>#{String(tierPosition).padStart(2, "0")}/{campaignConfig.tiers.length}</b></div>
+            <div className="share-card-topline"><span>بطاقتك صارت جاهزة</span></div>
             <div className="share-card-copy">
               <span className="share-card-mark" aria-hidden="true">✦</span>
               <div><h2>شارك بطاقتك.</h2><p>اختر المنصة أو احفظ الصورة عندك.</p></div>
