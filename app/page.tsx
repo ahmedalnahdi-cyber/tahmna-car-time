@@ -268,25 +268,14 @@ export default function Home() {
     ctx.fillStyle = "rgba(255,255,255,.07)";
     for (let y = 90; y < 1840; y += 38) for (let x = 80; x < 1020; x += 38) ctx.fillRect(x, y, 2, 2);
 
-    // ترويسة إصدار قابلة للجمع.
+    // شعارا الحملة وسويتر بجانب بعض دون عبارات إضافية.
     ctx.fillStyle = campaignConfig.colors.cream;
-    fillRoundRect(785, 76, 205, 142, 28);
+    fillRoundRect(554, 76, 205, 142, 28);
     ctx.direction = "rtl";
-    ctx.textAlign = "right";
-    ctx.drawImage(brandLogo, 827, 88, 120, 86);
-    ctx.fillStyle = campaignConfig.colors.cream;
-    ctx.font = '900 37px "Lama Sans", Arial';
-    ctx.fillText("بطاقة وقت السيارة", 730, 120);
-    ctx.fillStyle = "rgba(255,248,234,.66)";
-    ctx.font = '700 23px "Lama Sans", Arial';
-    ctx.fillText("إصدار تهمنا", 730, 163);
-    ctx.drawImage(sweaterLogo, 74, 78, 250, 103);
-    ctx.fillStyle = accent;
-    fillRoundRect(80, 190, 190, 48, 24);
-    ctx.fillStyle = "#fff";
-    ctx.textAlign = "center";
-    ctx.font = '900 20px "Lama Sans", Arial';
-    ctx.fillText("COLLECTIBLE", 175, 222);
+    ctx.drawImage(brandLogo, 596, 88, 120, 86);
+    ctx.fillStyle = "rgba(255,248,234,.36)";
+    fillRoundRect(520, 90, 2, 112, 1);
+    ctx.drawImage(sweaterLogo, 250, 91, 245, 101);
 
     // الرياكشن هو الواجهة الأساسية للبطاقة.
     const frameX = 80;
@@ -325,10 +314,7 @@ export default function Home() {
     ctx.textAlign = "center";
     ctx.fillStyle = "#fff";
     ctx.font = '900 64px "Lama Sans", Arial';
-    ctx.fillText(tier.name, 540, 785, 820);
-    ctx.fillStyle = accent;
-    ctx.font = '800 26px "Lama Sans", Arial';
-    ctx.fillText("شخصية نادرة مكتشفة", 540, 835);
+    ctx.fillText(tier.name, 540, 820, 820);
 
     // النتيجة والاسم بتسلسل قوي ومختصر.
     ctx.fillStyle = campaignConfig.colors.cream;

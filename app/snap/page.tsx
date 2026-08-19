@@ -45,7 +45,6 @@ export default async function SnapResultPage({ searchParams }: { searchParams: S
           <span className="snap-brand-divider" aria-hidden="true" />
           <img className="snap-sweater-logo" src="/sweater-logo-white.svg" alt="شعار سويتر" width="518" height="213" />
         </div>
-        <span>بطاقة وقت السيارة</span>
         <h1>{name} يقضي <strong>{days}</strong> {unit} داخل السيارة!</h1>
         <p>شخصيته: <b>{tier}</b></p>
         <Link href="/">اكتشف بطاقتك أنت <i aria-hidden="true">←</i></Link>

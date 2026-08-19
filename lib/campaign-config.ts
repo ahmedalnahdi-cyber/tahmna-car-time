@@ -28,7 +28,7 @@ export const campaignConfig = {
     step: 1,
     defaultValue: 67,
   },
-  shareUrl: "https://sweater.sa/tahmna",
+  shareUrl: "https://game.sweater.sa",
   bookingUrl: "https://sweater.go.link/?adj_t=239i9e5n",
   fallbackDiscount: {
     code: "تهمنا",
