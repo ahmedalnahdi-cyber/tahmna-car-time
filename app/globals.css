@@ -172,8 +172,8 @@ footer { padding: 42px 20px; color: var(--cream); background: var(--ink); }
 .footer-inner { width: min(100%, 680px); margin: auto; display: grid; gap: 24px; }
 .footer-brand { display: flex; align-items: center; gap: 14px; text-align: right; }
 .footer-logos { display: flex; align-items: center; gap: 12px; flex: 0 0 auto; }
-.footer-logo { width: 74px; height: 58px; flex: 0 0 auto; display: grid; place-items: center; background: var(--cream); border-radius: 16px; transform: rotate(-2deg); }
-.footer-logo img { width: 56px; height: 42px; object-fit: contain; }
+.footer-logo { width: 82px; height: 58px; flex: 0 0 auto; display: grid; place-items: center; }
+.footer-logo img { width: 76px; height: 54px; object-fit: contain; }
 .footer-brand-divider { width: 1px; height: 38px; background: rgba(255,248,234,.28); }
 .footer-sweater-logo { width: 106px; height: auto; object-fit: contain; }
 .footer-brand strong, .footer-brand small { display: block; }

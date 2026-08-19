@@ -630,7 +630,7 @@ export default function Home() {
               </a>
             ))}
           </nav>
-          <a className="footer-app" href="https://sweater.go.link/" target="_blank" rel="noreferrer" onClick={() => track("app_download_clicked")}>
+          <a className="footer-app" href="https://sweater.go.link/?adj_t=239i9e5n" target="_blank" rel="noreferrer" onClick={() => track("app_download_clicked")}>
             <span><small>متوفر على iOS وAndroid</small><strong>حمّل تطبيق سويتر</strong></span><b aria-hidden="true">↗</b>
           </a>
         </div>
