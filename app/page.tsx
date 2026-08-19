@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import QRCode from "qrcode";
-import { FaInstagram, FaSnapchat, FaTiktok, FaXTwitter } from "react-icons/fa6";
+import { FaInstagram, FaSnapchat, FaTiktok, FaWhatsapp, FaXTwitter } from "react-icons/fa6";
 import { campaignConfig, getTier, type ResultTier } from "../lib/campaign-config";
 
 type Screen = "input" | "calculating" | "result";
@@ -400,10 +400,10 @@ export default function Home() {
     track("discount_revealed");
   };
 
-  const share = async () => {
+  const share = async (platform: "instagram" | "whatsapp" | "general" = "general") => {
     setSharing(true);
     setShareError("");
-    track("share_clicked");
+    track("share_clicked", { platform });
     let file: File | null = null;
     try {
       file = await generateStory();
@@ -413,7 +413,7 @@ export default function Home() {
         text: `أنا ${displayName} وطلعت أقضي ${formatNumber(days)} ${getDayUnit(days)} من سنتي داخل السيارة 😅 احسب نتيجتك أنت بعد. ${campaignConfig.brand.hashtag}`,
       };
       if (navigator.share && navigator.canShare?.({ files: [file] })) {
-        track("share_invoked");
+        track("share_invoked", { platform });
         await navigator.share(shareData);
         await revealDiscount();
       } else {
@@ -576,25 +576,24 @@ export default function Home() {
             <div className="share-card-topline"><span>بطاقتك صارت جاهزة</span><b>#{String(tierPosition).padStart(2, "0")}/{campaignConfig.tiers.length}</b></div>
             <div className="share-card-copy">
               <span className="share-card-mark" aria-hidden="true">✦</span>
-              <div><h2>خلّ بطاقتك تنتشر.</h2><p>صورة ستوري كاملة باسمك ورياكشن شخصيتك.</p></div>
+              <div><h2>شارك بطاقتك.</h2><p>اختر المنصة أو احفظ الصورة عندك.</p></div>
             </div>
-            <button className="share-hero-button" onClick={share} disabled={sharing} aria-busy={sharing}>
-              <span className="share-button-icon" aria-hidden="true">↗</span>
-              <span className="share-button-copy"><strong>{sharing ? "نصمّم بطاقتك الآن…" : "انشر بطاقتي"}</strong><small>{sharing ? "ثواني وتفتح لك المشاركة" : "صورة 1080 × 1920 جاهزة للستوري"}</small></span>
-              <span className="share-button-arrow" aria-hidden="true">←</span>
-            </button>
-            <button
-              type="button"
-              className="snap-version-button snapchat-share-button"
-              data-share-url={snapShareUrl}
-              onClick={() => { track("share_invoked", { platform: "snapchat_sticker" }); void revealDiscount(); }}
-            >
-              <span className="snap-ghost" aria-hidden="true">SC</span>
-              <span><strong>شاركها على السناب</strong><small>رقم أيامك وشخصيتك جاهزة — ورّهم نتيجتك</small></span>
-              <i aria-hidden="true">↗</i>
-            </button>
-            <small className="share-hint">يفتح زر المشاركة في جوالك مباشرة — اختر التطبيق اللي تبيه.</small>
-            {shareError && <div className="share-error" role="alert"><span>{shareError}</span><button onClick={share}>إعادة المحاولة</button></div>}
+            <div className="share-platform-grid">
+              <button type="button" className="share-platform share-platform-snap snapchat-share-button" data-share-url={snapShareUrl} onClick={() => { track("share_invoked", { platform: "snapchat_sticker" }); void revealDiscount(); }}>
+                <FaSnapchat aria-hidden="true" /><span>سناب</span>
+              </button>
+              <button type="button" className="share-platform share-platform-instagram" onClick={() => void share("instagram")} disabled={sharing} aria-busy={sharing}>
+                <FaInstagram aria-hidden="true" /><span>إنستقرام</span>
+              </button>
+              <button type="button" className="share-platform share-platform-whatsapp" onClick={() => void share("whatsapp")} disabled={sharing} aria-busy={sharing}>
+                <FaWhatsapp aria-hidden="true" /><span>واتساب</span>
+              </button>
+              <button type="button" className="share-platform share-platform-save" onClick={downloadAgain} disabled={sharing}>
+                <b aria-hidden="true">↓</b><span>حفظ</span>
+              </button>
+            </div>
+            <small className="share-hint">إنستقرام وواتساب يفتحان مشاركة الصورة مباشرة من جوالك.</small>
+            {shareError && <div className="share-error" role="alert"><span>{shareError}</span><button onClick={() => void share()}>إعادة المحاولة</button></div>}
           </div>
 
           {fallbackOpen && (
