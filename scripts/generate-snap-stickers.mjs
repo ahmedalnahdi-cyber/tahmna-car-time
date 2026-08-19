@@ -31,6 +31,8 @@ for (const minutes of minutesToRender) {
   const [, , name, accent] = tiers.find(([min, max]) => minutes >= min && minutes <= max);
   const rawDays = (minutes * 365) / 1440;
   const days = Math.abs(rawDays - Math.round(rawDays)) < 0.05 ? String(Math.round(rawDays)) : rawDays.toFixed(1);
+  const numericDays = Number(days);
+  const dayUnit = numericDays === 2 ? "يومين" : Number.isInteger(numericDays) && numericDays >= 3 && numericDays <= 10 ? "أيام" : "يوم";
   const nameSize = name.length > 15 ? 28 : 34;
   const svg = `
   <svg width="400" height="400" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
@@ -50,7 +52,7 @@ for (const minutes of minutesToRender) {
     <rect x="278" y="25" width="100" height="48" rx="16" fill="#171512"/>
     <text x="200" y="124" text-anchor="middle" direction="rtl" fill="#171512" font-size="24" font-weight="900">وقتي داخل السيارة</text>
     <text x="200" y="244" text-anchor="middle" fill="#ff5a1f" stroke="#171512" stroke-width="3" paint-order="stroke" font-size="118" font-weight="900">${days}</text>
-    <text x="200" y="285" text-anchor="middle" direction="rtl" fill="#171512" font-size="27" font-weight="900">يوم في السنة</text>
+    <text x="200" y="285" text-anchor="middle" direction="rtl" fill="#171512" font-size="27" font-weight="900">${dayUnit} في السنة</text>
     <text x="200" y="363" text-anchor="middle" direction="rtl" fill="#fff" font-size="${nameSize}" font-weight="900">${name}</text>
   </svg>`;
   await sharp(Buffer.from(svg))

@@ -10,6 +10,12 @@ type Discount = { code: string; value: string; expiresAt: string; terms: string 
 
 const englishDigits = new Intl.NumberFormat("en-US", { maximumFractionDigits: 1 });
 const formatNumber = (value: number) => englishDigits.format(Math.abs(value - Math.round(value)) < 0.05 ? Math.round(value) : value);
+const getDayUnit = (value: number) => {
+  const displayedValue = Math.abs(value - Math.round(value)) < 0.05 ? Math.round(value) : Number(value.toFixed(1));
+  if (displayedValue === 2) return "يومين";
+  if (Number.isInteger(displayedValue) && displayedValue >= 3 && displayedValue <= 10) return "أيام";
+  return "يوم";
+};
 const getMemeVideo = (tier: ResultTier) => `/memes/${tier.id}.mp4`;
 const socialLinks = [
   { label: "إنستقرام", icon: FaInstagram, href: "https://www.instagram.com/sweater_sa/" },
@@ -113,7 +119,7 @@ export default function Home() {
   const tierPosition = useMemo(() => campaignConfig.tiers.findIndex((item) => item.id === tier.id) + 1, [tier.id]);
   const displayName = useMemo(() => nameInput.trim().replace(/\s+/g, " "), [nameInput]);
   const snapShareUrl = useMemo(() => {
-    const params = new URLSearchParams({ name: displayName, days: formatNumber(days), minutes: String(minutes), tier: tier.name, v: "5" });
+    const params = new URLSearchParams({ name: displayName, days: formatNumber(days), unit: getDayUnit(days), minutes: String(minutes), tier: tier.name, v: "6" });
     return `https://tahmna-car-time.a7medalnahdi.chatgpt.site/snap?${params.toString()}`;
   }, [days, displayName, minutes, tier.name]);
 
@@ -334,7 +340,7 @@ export default function Home() {
     ctx.fillText(formatNumber(days), 540, 1240);
     ctx.fillStyle = campaignConfig.colors.cream;
     ctx.font = '900 43px "Lama Sans", Arial';
-    ctx.fillText("يوم تقضيه من سنتك داخل السيارة", 540, 1320, 880);
+    ctx.fillText(`${getDayUnit(days)} في السنة داخل السيارة`, 540, 1320, 880);
     ctx.fillStyle = accent;
     fillRoundRect(160, 1360, 760, 76, 38);
     ctx.fillStyle = "#fff";
@@ -404,7 +410,7 @@ export default function Home() {
       const shareData = {
         files: [file],
         title: "شارك نتيجتك",
-        text: `أنا ${displayName} وطلعت أقضي ${formatNumber(days)} يومًا من سنتي داخل السيارة 😅 احسب نتيجتك أنت بعد. ${campaignConfig.brand.hashtag}`,
+        text: `أنا ${displayName} وطلعت أقضي ${formatNumber(days)} ${getDayUnit(days)} من سنتي داخل السيارة 😅 احسب نتيجتك أنت بعد. ${campaignConfig.brand.hashtag}`,
       };
       if (navigator.share && navigator.canShare?.({ files: [file] })) {
         track("share_invoked");
@@ -442,7 +448,7 @@ export default function Home() {
   };
 
   const copyShareText = async () => {
-    await navigator.clipboard.writeText(`أنا ${displayName} وطلعت أقضي ${formatNumber(days)} يومًا من سنتي داخل السيارة 😅 احسب نتيجتك أنت بعد. ${campaignConfig.brand.hashtag}`);
+    await navigator.clipboard.writeText(`أنا ${displayName} وطلعت أقضي ${formatNumber(days)} ${getDayUnit(days)} من سنتي داخل السيارة 😅 احسب نتيجتك أنت بعد. ${campaignConfig.brand.hashtag}`);
   };
 
   const copyCode = async () => {
@@ -555,7 +561,7 @@ export default function Home() {
             </div>
             <div className="result-card-score">
               <span>تقضي من سنتك داخل السيارة</span>
-              <div className="result-card-days"><strong>{formatNumber(days)}</strong><em>يوم</em></div>
+              <div className="result-card-days"><strong>{formatNumber(days)}</strong><em>{getDayUnit(days)}</em></div>
             </div>
             <div className="result-card-persona">
               <small>شخصيتك</small>
