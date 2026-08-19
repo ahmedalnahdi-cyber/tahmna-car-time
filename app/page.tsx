@@ -411,7 +411,9 @@ export default function Home() {
       const shareData = {
         files: [file],
         title: "شارك نتيجتك",
-        text: `أنا ${displayName} وطلعت أقضي ${formatNumber(days)} ${getDayUnit(days)} من سنتي داخل السيارة 😅 احسب نتيجتك أنت بعد. ${campaignConfig.brand.hashtag}`,
+        text: platform === "whatsapp"
+          ? "تتوقع نتيجتك أعلى مني؟👀\nاحسب كم يوم تقضيه بسيارتك مع سويتر\n#سيارتك_تهمنا\ngame.sweater.sa"
+          : `أنا ${displayName} وطلعت أقضي ${formatNumber(days)} ${getDayUnit(days)} من سنتي داخل السيارة 😅 احسب نتيجتك أنت بعد. ${campaignConfig.brand.hashtag}`,
       };
       if (navigator.share && navigator.canShare?.({ files: [file] })) {
         track("share_invoked", { platform });
