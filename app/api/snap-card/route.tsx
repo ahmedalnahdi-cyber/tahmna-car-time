@@ -2,6 +2,7 @@ import { ImageResponse } from "next/og";
 import { getTier } from "../../../lib/campaign-config";
 
 export const runtime = "edge";
+export const dynamic = "force-dynamic";
 
 const formatNumber = (value: number) => {
   const shown = Math.abs(value - Math.round(value)) < 0.05 ? Math.round(value) : Number(value.toFixed(1));
@@ -107,7 +108,7 @@ export async function GET(request: Request) {
       width: 1080,
       height: 1350,
       fonts: [{ name: "Lama Sans", data: font, weight: 900, style: "normal" }],
-      headers: { "Cache-Control": "public, max-age=31536000, immutable" },
+      headers: { "Cache-Control": "no-store, max-age=0" },
     },
   );
 }
