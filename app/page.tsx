@@ -32,6 +32,22 @@ const track = (name: string, detail: Record<string, unknown> = {}) => {
   analyticsWindow.dataLayer ??= [];
   analyticsWindow.gtag ??= (...args) => analyticsWindow.dataLayer?.push(args);
   analyticsWindow.gtag?.("event", name, detail);
+  try {
+    const visitorKey = "tahmna_anonymous_visitor";
+    let visitorId = localStorage.getItem(visitorKey);
+    if (!visitorId) {
+      visitorId = crypto.randomUUID?.() ?? `${Date.now()}-${Math.random().toString(36).slice(2)}`;
+      localStorage.setItem(visitorKey, visitorId);
+    }
+    void fetch("/api/analytics", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      keepalive: true,
+      body: JSON.stringify({ name, ...detail, visitorId, sessionId: getSessionId() }),
+    }).catch(() => undefined);
+  } catch {
+    // لا نسمح للعداد الخلفي بالتأثير على اللعبة.
+  }
 };
 
 const initializeSnapButtons = () => {
@@ -116,7 +132,7 @@ export default function Home() {
   const [fallbackOpen, setFallbackOpen] = useState(false);
   const [discount, setDiscount] = useState<Discount | null>(null);
   const [copied, setCopied] = useState(false);
-  const [siteOrigin, setSiteOrigin] = useState("");
+  const [siteOrigin] = useState(() => typeof window === "undefined" ? "" : window.location.origin);
   const started = useRef(false);
 
   const days = useMemo(() => (minutes * 365) / 1440, [minutes]);
@@ -129,8 +145,6 @@ export default function Home() {
   }, [days, displayName, minutes, siteOrigin, tier.name]);
 
   useEffect(() => track("calculator_opened"), []);
-  useEffect(() => setSiteOrigin(window.location.origin), []);
-
   useEffect(() => {
     const snapWindow = window as typeof window & { snapKitInit?: () => void };
     snapWindow.snapKitInit = initializeSnapButtons;
