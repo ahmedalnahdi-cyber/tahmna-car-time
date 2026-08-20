@@ -124,9 +124,9 @@ export default function Home() {
   const tier = useMemo(() => getTier(minutes), [minutes]);
   const displayName = useMemo(() => nameInput.trim().replace(/\s+/g, " "), [nameInput]);
   const snapShareUrl = useMemo(() => {
-    const params = new URLSearchParams({ days: formatNumber(days), unit: getDayUnit(days), minutes: String(minutes), tier: tier.name, v: "8" });
+    const params = new URLSearchParams({ name: displayName, days: formatNumber(days), unit: getDayUnit(days), minutes: String(minutes), tier: tier.name, v: "9" });
     return `${siteOrigin}/snap?${params.toString()}`;
-  }, [days, minutes, siteOrigin, tier.name]);
+  }, [days, displayName, minutes, siteOrigin, tier.name]);
 
   useEffect(() => track("calculator_opened"), []);
   useEffect(() => setSiteOrigin(window.location.origin), []);

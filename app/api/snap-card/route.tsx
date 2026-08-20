@@ -15,9 +15,13 @@ const dayUnit = (value: number) => {
   return "يوم";
 };
 
+const cleanName = (value: string | null) =>
+  (value ?? "صاحب البطاقة").replace(/[<>]/g, "").trim().replace(/\s+/g, " ").slice(0, 20) || "صاحب البطاقة";
+
 export async function GET(request: Request) {
   const url = new URL(request.url);
   const minutes = Math.min(240, Math.max(1, Math.round(Number(url.searchParams.get("minutes")) || 1)));
+  const name = cleanName(url.searchParams.get("name"));
   const days = (minutes * 365) / 1440;
   const annualMinutes = minutes * 365;
   const hours = Math.round((minutes * 365) / 60);
@@ -63,8 +67,8 @@ export async function GET(request: Request) {
         </div>
 
         <div style={{ height: "234px", marginTop: "22px", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
-          <div style={{ display: "flex", flexDirection: "row-reverse", justifyContent: "center", gap: "10px", fontSize: "36px", whiteSpace: "nowrap", color: "rgba(255,248,234,.82)" }}>
-            {["شخصية", ...tier.name.split(" ").reverse()].map((word, index) => <div key={`${word}-${index}`} style={{ display: "flex" }}>{word}</div>)}
+          <div dir="rtl" style={{ display: "flex", justifyContent: "center", fontSize: "42px", whiteSpace: "nowrap", color: "#fff8ea", textAlign: "center" }}>
+            {name}
           </div>
           <div style={{ marginTop: "13px", display: "flex", alignItems: "flex-end", justifyContent: "center", gap: "18px" }}>
             <div style={{ display: "flex", fontSize: "150px", lineHeight: 0.72, color: "#ff5a1f", letterSpacing: "-6px" }}>{formatNumber(days)}</div>
