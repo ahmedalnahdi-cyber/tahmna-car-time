@@ -33,7 +33,13 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
           {`window.dataLayer = window.dataLayer || [];
 window.gtag = window.gtag || function(){window.dataLayer.push(arguments);};
 window.gtag('js', new Date());
-window.gtag('config', 'G-4FR2S86GJY', { send_page_view: true });`}
+window.gtag('config', 'G-4FR2S86GJY', { send_page_view: false });
+window.gtag('event', 'page_view', {
+  page_title: document.title,
+  page_location: window.location.href,
+  page_path: window.location.pathname + window.location.search
+});
+document.documentElement.dataset.analyticsReady = 'true';`}
         </Script>
       </body>
     </html>
