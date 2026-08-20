@@ -15,13 +15,11 @@ const dayUnit = (value: number) => {
   return "يوم";
 };
 
-const cleanName = (value: string | null) => (value ?? "صاحب البطاقة").replace(/[<>]/g, "").trim().slice(0, 20) || "صاحب البطاقة";
-
 export async function GET(request: Request) {
   const url = new URL(request.url);
   const minutes = Math.min(240, Math.max(1, Math.round(Number(url.searchParams.get("minutes")) || 1)));
-  const name = cleanName(url.searchParams.get("name"));
   const days = (minutes * 365) / 1440;
+  const annualMinutes = minutes * 365;
   const hours = Math.round((minutes * 365) / 60);
   const tier = getTier(minutes);
   const origin = url.origin;
@@ -49,8 +47,8 @@ export async function GET(request: Request) {
         <div style={{ position: "absolute", inset: 0, display: "flex", opacity: 0.11, backgroundImage: "radial-gradient(#fff8ea 2px, transparent 2px)", backgroundSize: "38px 38px" }} />
 
         <div style={{ height: "140px", display: "flex", flexDirection: "row-reverse", alignItems: "center", justifyContent: "center", gap: "32px" }}>
-          <div style={{ width: "190px", height: "128px", display: "flex", alignItems: "center", justifyContent: "center", background: "#fff8ea", borderRadius: "26px" }}>
-            <img src={`${origin}/tahmna-logo.svg`} alt="" style={{ width: 128, height: 92, objectFit: "contain" }} />
+          <div style={{ width: "190px", height: "128px", display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <img src={`${origin}/tahmna-logo.svg`} alt="" style={{ width: 158, height: 112, objectFit: "contain" }} />
           </div>
           <div style={{ width: "2px", height: "104px", display: "flex", background: "rgba(255,248,234,.35)" }} />
           <img src={`${origin}/sweater-logo-white.svg`} alt="" style={{ width: 245, height: 102, objectFit: "contain" }} />
@@ -65,20 +63,20 @@ export async function GET(request: Request) {
         </div>
 
         <div style={{ height: "234px", marginTop: "22px", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
-          <div style={{ display: "flex", flexDirection: "row-reverse", justifyContent: "center", gap: "12px", fontSize: "39px", whiteSpace: "nowrap" }}>
-            {[`${name}…`, "وش", "ذا", "كله!"].map((word, index) => <div key={`${word}-${index}`} style={{ display: "flex" }}>{word}</div>)}
+          <div style={{ display: "flex", flexDirection: "row-reverse", justifyContent: "center", gap: "10px", fontSize: "36px", whiteSpace: "nowrap", color: "rgba(255,248,234,.82)" }}>
+            {["شخصية", tier.name].map((word, index) => <div key={`${word}-${index}`} style={{ display: "flex" }}>{word}</div>)}
           </div>
           <div style={{ marginTop: "13px", display: "flex", alignItems: "flex-end", justifyContent: "center", gap: "18px" }}>
             <div style={{ display: "flex", fontSize: "150px", lineHeight: 0.72, color: "#ff5a1f", letterSpacing: "-6px" }}>{formatNumber(days)}</div>
           </div>
           <div style={{ marginTop: "10px", display: "flex", flexDirection: "row-reverse", justifyContent: "center", gap: "9px", fontSize: "27px", color: "rgba(255,248,234,.76)", whiteSpace: "nowrap" }}>
-            {[dayUnit(days), "في", "السنة", "داخل", "السيارة"].map((word, index) => <div key={`${word}-${index}`} style={{ display: "flex" }}>{word}</div>)}
+            {[dayUnit(days), "في", "السنة"].map((word, index) => <div key={`${word}-${index}`} style={{ display: "flex" }}>{word}</div>)}
           </div>
         </div>
 
         <div style={{ height: "62px", marginTop: "8px", padding: "0 30px", display: "flex", flexDirection: "row-reverse", alignItems: "center", justifyContent: "center", gap: "22px", background: tier.accent, borderRadius: "31px", color: "white", fontSize: "25px" }}>
           <div style={{ display: "flex", flexDirection: "row-reverse", gap: "8px" }}>
-            {[String(minutes), "دقيقة", "يوميًا"].map((word, index) => <div key={`${word}-${index}`} style={{ display: "flex" }}>{word}</div>)}
+            {[formatNumber(annualMinutes), "دقيقة", "سنويًا"].map((word, index) => <div key={`${word}-${index}`} style={{ display: "flex" }}>{word}</div>)}
           </div>
           <div style={{ display: "flex" }}>•</div>
           <div style={{ display: "flex", flexDirection: "row-reverse", gap: "8px" }}>
