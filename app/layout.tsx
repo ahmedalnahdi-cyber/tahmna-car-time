@@ -32,6 +32,11 @@ window.gtag('js', new Date());
 window.gtag('config', 'G-4FR2S86GJY', { send_page_view: true });`,
           }}
         />
+        <script
+          type="module"
+          src="https://static.cloudflareinsights.com/beacon.min.js"
+          data-cf-beacon='{"token":"5f2957c3429742479898308420beaa1e"}'
+        />
       </head>
       <body>
         {children}
