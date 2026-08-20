@@ -618,7 +618,7 @@ export default function Home() {
               <span className="footer-brand-divider" aria-hidden="true" />
               <img className="footer-sweater-logo" src="/sweater-logo-white.svg" alt="شعار سويتر" />
             </span>
-            <div><strong>خلّنا قريبين.</strong><small>تابع حسابات سويتر لكل جديد.</small></div>
+            <div><strong>تابعنا على منصاتنا</strong><small>تابع حسابات سويتر لكل جديد.</small></div>
           </div>
           <nav className="footer-socials" aria-label="حسابات سويتر">
             {socialLinks.map((social) => (
