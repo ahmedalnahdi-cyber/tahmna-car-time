@@ -39,7 +39,7 @@ export const campaignConfig = {
     {
       id: "meme-tier-1",
       min: 1,
-      max: 40,
+      max: 25,
       name: "المحسود",
       message: "ترا كل أهل الرياض حاسدينك.",
       image: "/memes/meme-tier-1.webp",
@@ -49,7 +49,7 @@ export const campaignConfig = {
     },
     {
       id: "meme-tier-3",
-      min: 41,
+      min: 26,
       max: 45,
       name: "المحظوظ",
       message: "ساكن جنب كل شيء.",
@@ -72,7 +72,7 @@ export const campaignConfig = {
     {
       id: "meme-tier-6",
       min: 56,
-      max: 70,
+      max: 65,
       name: "مدرك الإشارات",
       message: "حافظ كل إشارة في دربك.",
       image: "/memes/meme-tier-6.webp",
@@ -82,8 +82,8 @@ export const campaignConfig = {
     },
     {
       id: "meme-tier-8",
-      min: 71,
-      max: 80,
+      min: 66,
+      max: 75,
       name: "شيخ المخارج",
       message: "ما بقى اختصار ما جربته.",
       image: "/memes/meme-tier-8.webp",
@@ -93,7 +93,7 @@ export const campaignConfig = {
     },
     {
       id: "meme-tier-10",
-      min: 81,
+      min: 76,
       max: 85,
       name: "ساكن في الدائري",
       message: "مصبح ممسي في الدائري.",
