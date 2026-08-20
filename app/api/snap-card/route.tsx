@@ -48,7 +48,7 @@ export async function GET(request: Request) {
 
         <div style={{ height: "140px", display: "flex", flexDirection: "row-reverse", alignItems: "center", justifyContent: "center", gap: "32px" }}>
           <div style={{ width: "190px", height: "128px", display: "flex", alignItems: "center", justifyContent: "center" }}>
-            <img src={`${origin}/tahmna-logo.svg`} alt="" style={{ width: 158, height: 112, objectFit: "contain" }} />
+            <img src={`${origin}/tahmna-logo.svg`} alt="" style={{ width: 128, height: 92, objectFit: "contain" }} />
           </div>
           <div style={{ width: "2px", height: "104px", display: "flex", background: "rgba(255,248,234,.35)" }} />
           <img src={`${origin}/sweater-logo-white.svg`} alt="" style={{ width: 245, height: 102, objectFit: "contain" }} />
@@ -64,7 +64,7 @@ export async function GET(request: Request) {
 
         <div style={{ height: "234px", marginTop: "22px", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
           <div style={{ display: "flex", flexDirection: "row-reverse", justifyContent: "center", gap: "10px", fontSize: "36px", whiteSpace: "nowrap", color: "rgba(255,248,234,.82)" }}>
-            {["شخصية", tier.name].map((word, index) => <div key={`${word}-${index}`} style={{ display: "flex" }}>{word}</div>)}
+            {["شخصية", ...tier.name.split(" ")].map((word, index) => <div key={`${word}-${index}`} style={{ display: "flex" }}>{word}</div>)}
           </div>
           <div style={{ marginTop: "13px", display: "flex", alignItems: "flex-end", justifyContent: "center", gap: "18px" }}>
             <div style={{ display: "flex", fontSize: "150px", lineHeight: 0.72, color: "#ff5a1f", letterSpacing: "-6px" }}>{formatNumber(days)}</div>
