@@ -48,7 +48,7 @@ export async function GET(request: Request) {
       >
         <div style={{ position: "absolute", inset: 0, display: "flex", opacity: 0.11, backgroundImage: "radial-gradient(#fff8ea 2px, transparent 2px)", backgroundSize: "38px 38px" }} />
 
-        <div style={{ height: "140px", display: "flex", alignItems: "center", justifyContent: "center", gap: "32px" }}>
+        <div style={{ height: "140px", display: "flex", flexDirection: "row-reverse", alignItems: "center", justifyContent: "center", gap: "32px" }}>
           <div style={{ width: "190px", height: "128px", display: "flex", alignItems: "center", justifyContent: "center", background: "#fff8ea", borderRadius: "26px" }}>
             <img src={`${origin}/tahmna-logo.svg`} alt="" style={{ width: 128, height: 92, objectFit: "contain" }} />
           </div>
@@ -57,34 +57,45 @@ export async function GET(request: Request) {
         </div>
 
         <div style={{ height: "465px", marginTop: "28px", display: "flex", position: "relative", border: "8px solid #fff8ea", borderRadius: "42px", overflow: "hidden" }}>
-          <img src={`${origin}/snap-stickers/${tier.id}.png`} alt="" style={{ width: 920, height: 465, objectFit: "cover" }} />
+          <img src={`${origin}/meme-frames/${tier.id}.png`} alt="" style={{ width: 920, height: 465, objectFit: "cover" }} />
           <div style={{ position: "absolute", inset: 0, display: "flex", background: "linear-gradient(transparent 48%, rgba(0,0,0,.9))" }} />
-          <div style={{ position: "absolute", left: 30, right: 30, bottom: 25, display: "flex", justifyContent: "center", color: "white", fontSize: "58px" }}>{tier.name}</div>
-        </div>
-
-        <div style={{ height: "234px", marginTop: "22px", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
-          <div style={{ display: "flex", justifyContent: "center", fontSize: "39px", whiteSpace: "nowrap" }}>{`${name}… وش ذا كله!`}</div>
-          <div style={{ marginTop: "3px", display: "flex", justifyContent: "center", fontSize: "25px", color: "rgba(255,248,234,.72)", whiteSpace: "nowrap" }}>تقضيه من سنتك داخل السيارة</div>
-          <div style={{ marginTop: "13px", display: "flex", alignItems: "flex-end", justifyContent: "center", gap: "18px" }}>
-            <div style={{ paddingBottom: "14px", display: "flex", fontSize: "36px" }}>{dayUnit(days)}</div>
-            <div style={{ display: "flex", fontSize: "150px", lineHeight: 0.72, color: "#ff5a1f", letterSpacing: "-6px" }}>{formatNumber(days)}</div>
+          <div style={{ position: "absolute", left: 30, right: 30, bottom: 25, display: "flex", flexDirection: "row-reverse", justifyContent: "center", gap: "14px", color: "white", fontSize: "58px" }}>
+            {tier.name.split(" ").map((word, index) => <div key={`${word}-${index}`} style={{ display: "flex" }}>{word}</div>)}
           </div>
         </div>
 
-        <div style={{ height: "62px", marginTop: "8px", padding: "0 30px", display: "flex", alignItems: "center", justifyContent: "center", gap: "20px", background: tier.accent, borderRadius: "31px", color: "white", fontSize: "25px" }}>
-          <div style={{ display: "flex" }}>{`${minutes} دقيقة يوميًا`}</div>
-          <div style={{ display: "flex" }}>•</div>
-          <div style={{ display: "flex" }}>{`${hours} ساعة سنويًا`}</div>
+        <div style={{ height: "234px", marginTop: "22px", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
+          <div style={{ display: "flex", flexDirection: "row-reverse", justifyContent: "center", gap: "12px", fontSize: "39px", whiteSpace: "nowrap" }}>
+            {[`${name}…`, "وش", "ذا", "كله!"].map((word, index) => <div key={`${word}-${index}`} style={{ display: "flex" }}>{word}</div>)}
+          </div>
+          <div style={{ marginTop: "13px", display: "flex", alignItems: "flex-end", justifyContent: "center", gap: "18px" }}>
+            <div style={{ display: "flex", fontSize: "150px", lineHeight: 0.72, color: "#ff5a1f", letterSpacing: "-6px" }}>{formatNumber(days)}</div>
+          </div>
+          <div style={{ marginTop: "10px", display: "flex", flexDirection: "row-reverse", justifyContent: "center", gap: "9px", fontSize: "27px", color: "rgba(255,248,234,.76)", whiteSpace: "nowrap" }}>
+            {[dayUnit(days), "في", "السنة", "داخل", "السيارة"].map((word, index) => <div key={`${word}-${index}`} style={{ display: "flex" }}>{word}</div>)}
+          </div>
         </div>
 
-        <div style={{ height: "48px", display: "flex", alignItems: "center", justifyContent: "center", color: "rgba(255,248,234,.74)", fontSize: "23px" }}>
-          {tier.message}
+        <div style={{ height: "62px", marginTop: "8px", padding: "0 30px", display: "flex", flexDirection: "row-reverse", alignItems: "center", justifyContent: "center", gap: "22px", background: tier.accent, borderRadius: "31px", color: "white", fontSize: "25px" }}>
+          <div style={{ display: "flex", flexDirection: "row-reverse", gap: "8px" }}>
+            {[String(minutes), "دقيقة", "يوميًا"].map((word, index) => <div key={`${word}-${index}`} style={{ display: "flex" }}>{word}</div>)}
+          </div>
+          <div style={{ display: "flex" }}>•</div>
+          <div style={{ display: "flex", flexDirection: "row-reverse", gap: "8px" }}>
+            {[String(hours), "ساعة", "سنويًا"].map((word, index) => <div key={`${word}-${index}`} style={{ display: "flex" }}>{word}</div>)}
+          </div>
+        </div>
+
+        <div style={{ height: "48px", display: "flex", flexDirection: "row-reverse", alignItems: "center", justifyContent: "center", gap: "7px", color: "rgba(255,248,234,.74)", fontSize: "23px" }}>
+          {tier.message.replace(/[.،]$/g, "").split(" ").map((word, index) => <div key={`${word}-${index}`} style={{ display: "flex" }}>{word}</div>)}
         </div>
 
         <div style={{ height: "104px", marginTop: "8px", padding: "10px 22px", display: "flex", alignItems: "center", justifyContent: "space-between", background: "#fff8ea", borderRadius: "28px", color: "#171512" }}>
           <img src={`${origin}/qr-game-sweater.png`} alt="" style={{ width: 86, height: 86 }} />
           <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", marginRight: "25px", flex: 1 }}>
-            <div style={{ fontSize: "31px" }}>اكتشف بطاقتك</div>
+            <div style={{ display: "flex", flexDirection: "row-reverse", gap: "8px", fontSize: "31px" }}>
+              {["اكتشف", "بطاقتك"].map((word) => <div key={word} style={{ display: "flex" }}>{word}</div>)}
+            </div>
             <div style={{ marginTop: "4px", fontSize: "22px", color: "#ff5a1f" }}>#سيارتك_تهمنا</div>
           </div>
         </div>
