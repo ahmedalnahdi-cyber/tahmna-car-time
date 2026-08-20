@@ -33,7 +33,7 @@ export default async function SnapResultPage({ searchParams }: { searchParams: S
   const minutes = Math.min(240, Math.max(1, Math.round(Number(params.minutes) || 1)));
   const host = requestHeaders.get("x-forwarded-host") ?? requestHeaders.get("host") ?? "tahmna-car-time.a7medalnahdi.chatgpt.site";
   const protocol = requestHeaders.get("x-forwarded-proto") ?? (host.includes("localhost") ? "http" : "https");
-  const stickerParams = new URLSearchParams({ name, minutes: String(minutes), v: "16" });
+  const stickerParams = new URLSearchParams({ name, minutes: String(minutes), v: "18" });
   const sticker = `${protocol}://${host}/api/snap-card?${stickerParams.toString()}`;
 
   return (
