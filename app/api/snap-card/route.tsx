@@ -3,8 +3,6 @@ import { getTier } from "../../../lib/campaign-config";
 
 export const runtime = "edge";
 
-const lamaBlack = fetch(new URL("../../../public/fonts/LamaSans-Black.ttf", import.meta.url)).then((response) => response.arrayBuffer());
-
 const formatNumber = (value: number) => {
   const shown = Math.abs(value - Math.round(value)) < 0.05 ? Math.round(value) : Number(value.toFixed(1));
   return new Intl.NumberFormat("en-US", { maximumFractionDigits: 1 }).format(shown);
@@ -27,7 +25,7 @@ export async function GET(request: Request) {
   const hours = Math.round((minutes * 365) / 60);
   const tier = getTier(minutes);
   const origin = url.origin;
-  const font = await lamaBlack;
+  const font = await fetch(`${origin}/fonts/LamaSans-Black.ttf`).then((response) => response.arrayBuffer());
 
   return new ImageResponse(
     (
