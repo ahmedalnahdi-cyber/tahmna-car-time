@@ -64,7 +64,7 @@ export async function GET(request: Request) {
 
         <div style={{ height: "234px", marginTop: "22px", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
           <div style={{ display: "flex", flexDirection: "row-reverse", justifyContent: "center", gap: "10px", fontSize: "36px", whiteSpace: "nowrap", color: "rgba(255,248,234,.82)" }}>
-            {["شخصية", ...tier.name.split(" ")].map((word, index) => <div key={`${word}-${index}`} style={{ display: "flex" }}>{word}</div>)}
+            {["شخصية", ...tier.name.split(" ").reverse()].map((word, index) => <div key={`${word}-${index}`} style={{ display: "flex" }}>{word}</div>)}
           </div>
           <div style={{ marginTop: "13px", display: "flex", alignItems: "flex-end", justifyContent: "center", gap: "18px" }}>
             <div style={{ display: "flex", fontSize: "150px", lineHeight: 0.72, color: "#ff5a1f", letterSpacing: "-6px" }}>{formatNumber(days)}</div>
