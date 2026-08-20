@@ -59,46 +59,46 @@ export async function GET(request: Request) {
           <img src={`${origin}/sweater-logo-white.svg`} alt="" style={{ width: 245, height: 102, objectFit: "contain" }} />
         </div>
 
-        <div style={{ height: "465px", marginTop: "28px", display: "flex", position: "relative", border: "8px solid #fff8ea", borderRadius: "42px", overflow: "hidden" }}>
+        <div style={{ height: "445px", marginTop: "24px", display: "flex", position: "relative", border: "8px solid #fff8ea", borderRadius: "42px", overflow: "hidden" }}>
           <img src={`${origin}/meme-frames/${tier.id}.png`} alt="" style={{ width: 920, height: 465, objectFit: "cover" }} />
-          <div style={{ position: "absolute", inset: 0, display: "flex", background: "linear-gradient(transparent 48%, rgba(0,0,0,.9))" }} />
-          <div style={{ position: "absolute", left: 30, right: 30, bottom: 25, display: "flex", flexDirection: "row-reverse", justifyContent: "center", gap: "14px", color: "white", fontSize: "58px" }}>
-            {tier.name.split(" ").map((word, index) => <div key={`${word}-${index}`} style={{ display: "flex" }}>{word}</div>)}
+          <div style={{ position: "absolute", inset: 0, display: "flex", background: "linear-gradient(transparent 55%, rgba(0,0,0,.72))" }} />
+          <div dir="rtl" style={{ position: "absolute", right: 28, bottom: 24, padding: "13px 28px 15px", display: "flex", alignItems: "center", justifyContent: "center", color: "#171512", background: "#fff8ea", border: `5px solid ${tier.accent}`, borderRadius: "999px", boxShadow: "0 8px 0 rgba(0,0,0,.72)", fontSize: "46px", lineHeight: 1, whiteSpace: "nowrap", textAlign: "center" }}>
+            {tier.name}
           </div>
         </div>
 
-        <div style={{ height: "234px", marginTop: "22px", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
-          <div dir="rtl" style={{ display: "flex", justifyContent: "center", fontSize: "42px", whiteSpace: "nowrap", color: "#fff8ea", textAlign: "center" }}>
+        <div style={{ height: "236px", marginTop: "18px", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
+          <div dir="rtl" style={{ display: "flex", justifyContent: "center", fontSize: "40px", lineHeight: 1.2, whiteSpace: "nowrap", color: "#fff8ea", textAlign: "center" }}>
             {name}
           </div>
-          <div style={{ marginTop: "13px", display: "flex", alignItems: "flex-end", justifyContent: "center", gap: "18px" }}>
-            <div style={{ display: "flex", fontSize: "150px", lineHeight: 0.72, color: "#ff5a1f", letterSpacing: "-6px" }}>{formatNumber(days)}</div>
+          <div style={{ marginTop: "16px", display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <div style={{ display: "flex", fontSize: "142px", lineHeight: 0.74, color: "#ff5a1f", letterSpacing: "-5px" }}>{formatNumber(days)}</div>
           </div>
-          <div style={{ marginTop: "10px", display: "flex", flexDirection: "row-reverse", justifyContent: "center", gap: "9px", fontSize: "27px", color: "rgba(255,248,234,.76)", whiteSpace: "nowrap" }}>
-            {[dayUnit(days), "في", "السنة"].map((word, index) => <div key={`${word}-${index}`} style={{ display: "flex" }}>{word}</div>)}
-          </div>
-        </div>
-
-        <div style={{ height: "62px", marginTop: "8px", padding: "0 30px", display: "flex", flexDirection: "row-reverse", alignItems: "center", justifyContent: "center", gap: "22px", background: tier.accent, borderRadius: "31px", color: "white", fontSize: "25px" }}>
-          <div style={{ display: "flex", flexDirection: "row-reverse", gap: "8px" }}>
-            {[formatNumber(annualMinutes), "دقيقة", "سنويًا"].map((word, index) => <div key={`${word}-${index}`} style={{ display: "flex" }}>{word}</div>)}
-          </div>
-          <div style={{ display: "flex" }}>•</div>
-          <div style={{ display: "flex", flexDirection: "row-reverse", gap: "8px" }}>
-            {[String(hours), "ساعة", "سنويًا"].map((word, index) => <div key={`${word}-${index}`} style={{ display: "flex" }}>{word}</div>)}
+          <div dir="rtl" style={{ marginTop: "14px", display: "flex", justifyContent: "center", fontSize: "29px", lineHeight: 1.25, color: "rgba(255,248,234,.82)", whiteSpace: "nowrap", textAlign: "center" }}>
+            {`${dayUnit(days)} في السنة`}
           </div>
         </div>
 
-        <div style={{ height: "48px", display: "flex", flexDirection: "row-reverse", alignItems: "center", justifyContent: "center", gap: "7px", color: "rgba(255,248,234,.74)", fontSize: "23px" }}>
-          {tier.message.replace(/[.،]$/g, "").split(" ").map((word, index) => <div key={`${word}-${index}`} style={{ display: "flex" }}>{word}</div>)}
+        <div style={{ height: "78px", marginTop: "7px", padding: "9px 28px", display: "flex", flexDirection: "row-reverse", alignItems: "center", justifyContent: "center", gap: "32px", background: tier.accent, borderRadius: "28px", color: "white" }}>
+          <div style={{ width: "360px", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
+            <div style={{ display: "flex", fontSize: "29px", lineHeight: 1 }}>{formatNumber(annualMinutes)}</div>
+            <div dir="rtl" style={{ marginTop: "7px", display: "flex", fontSize: "18px", lineHeight: 1, opacity: .86 }}>دقيقة سنويًا</div>
+          </div>
+          <div style={{ width: "2px", height: "42px", display: "flex", background: "rgba(255,255,255,.42)" }} />
+          <div style={{ width: "360px", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
+            <div style={{ display: "flex", fontSize: "29px", lineHeight: 1 }}>{String(hours)}</div>
+            <div dir="rtl" style={{ marginTop: "7px", display: "flex", fontSize: "18px", lineHeight: 1, opacity: .86 }}>ساعة سنويًا</div>
+          </div>
+        </div>
+
+        <div dir="rtl" style={{ minHeight: "58px", padding: "10px 20px 8px", display: "flex", alignItems: "center", justifyContent: "center", color: "rgba(255,248,234,.82)", fontSize: "23px", lineHeight: 1.35, textAlign: "center" }}>
+          {tier.message.replace(/[.،]$/g, "")}
         </div>
 
         <div style={{ height: "104px", marginTop: "8px", padding: "10px 22px", display: "flex", alignItems: "center", justifyContent: "space-between", background: "#fff8ea", borderRadius: "28px", color: "#171512" }}>
           <img src={`${origin}/qr-game-sweater.png`} alt="" style={{ width: 86, height: 86 }} />
           <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", marginRight: "25px", flex: 1 }}>
-            <div style={{ display: "flex", flexDirection: "row-reverse", gap: "8px", fontSize: "31px" }}>
-              {["اكتشف", "بطاقتك"].map((word) => <div key={word} style={{ display: "flex" }}>{word}</div>)}
-            </div>
+            <div dir="rtl" style={{ display: "flex", fontSize: "31px", lineHeight: 1.2, textAlign: "right" }}>اكتشف بطاقتك</div>
             <div style={{ marginTop: "4px", fontSize: "22px", color: "#ff5a1f" }}>#سيارتك_تهمنا</div>
           </div>
         </div>
