@@ -479,7 +479,18 @@ export default function Home() {
   return (
     <main className={`experience screen-${screen}`} dir="rtl">
       <div className="noise" aria-hidden="true" />
-      <header><Brand /></header>
+      <header>
+        <Brand />
+        <a
+          className="story-link"
+          href="https://x.com/sweater_sa/status/2090473038156333074?s=46&t=jUNd_mWdypvOXs4AYQcv8Q"
+          target="_blank"
+          rel="noopener noreferrer"
+          onClick={() => track("story_link_clicked")}
+        >
+          اعرف القصة
+        </a>
+      </header>
 
       {screen === "input" && (
         <section className="panel input-panel" aria-labelledby="calculator-title">
